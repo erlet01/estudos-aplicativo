@@ -1,13 +1,32 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // 1. CLIQUE DO BOTÃO DE LOGIN
-    const leticiaBtn = document.getElementById("leticia-btn");
-    if (leticiaBtn) {
-        leticiaBtn.addEventListener("click", () => {
-            window.location.href = "dashboard.html";
-        });
+    // --- 1. BANCO DE DADOS LOCAL (LOCALSTORAGE) ---
+    // Carrega as tarefas salvas ou inicia com tarefas padrão se estiver vazio
+    let arrayTarefas = JSON.parse(localStorage.getItem("meuCronogramaTarefas")) || [
+        { texto: "Fazer um resumo", status: "todo" },
+        { texto: "Assistir uma aula", status: "doing" }
+    ];
+
+    function salvarNoBanco() {
+        localStorage.setItem("meuCronogramaTarefas", JSON.stringify(arrayTarefas));
     }
 
-    // 2. CONTROLE DO CALENDÁRIO E CRONOGRAMA
+    // --- 2. NAVEGAÇÃO ENTRE TELAS ---
+    const leticiaBtn = document.getElementById("leticia-btn");
+    if (leticiaBtn) {
+        leticiaBtn.addEventListener("click", () => { window.location.href = "dashboard.html"; });
+    }
+
+    const navHome = document.getElementById("nav-home");
+    const navTasks = document.getElementById("nav-tasks");
+
+    if (navHome) {
+        navHome.addEventListener("click", () => { window.location.href = "dashboard.html"; });
+    }
+    if (navTasks) {
+        navTasks.addEventListener("click", () => { window.location.href = "tarefas.html"; });
+    }
+
+    // --- 3. LOGICA DO CALENDÁRIO E CRONOGRAMA (APENAS NA DASHBOARD) ---
     const dayNameDisplay = document.getElementById("current-day-name");
     if (dayNameDisplay) {
         const dataAtual = new Date();
@@ -32,9 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const subjectDisplay = document.getElementById("schedule-subject");
         const iconDisplay = document.getElementById("schedule-icon-day");
         
-        if (subjectDisplay) {
-            subjectDisplay.innerHTML = cronogramaEstudos[numeroDiaHoje];
-        }
+        if (subjectDisplay) subjectDisplay.innerHTML = cronogramaEstudos[numeroDiaHoje];
         
         const subText = document.querySelector(".schedule-info p");
         if (numeroDiaHoje === 0) {
@@ -55,74 +72,119 @@ document.addEventListener("DOMContentLoaded", () => {
             const numDisplay = diaDom.querySelector('.num');
             if (numDisplay) numDisplay.innerText = dataAlvo.getDate();
         });
+    }
 
-        // --- SISTEMA DINÂMICO DE TAREFAS (ORDENAÇÃO AUTOMÁTICA) ---
-        const listContainer = document.getElementById("tasks-list");
-        const addTaskBtn = document.getElementById("add-task-btn");
+    // --- 4. RENDERIZAR TAREFAS NA DASHBOARD DA TELA PRINCIPAL ---
+    const listContainerDashboard = document.getElementById("tasks-list");
+    const addTaskBtnDashboard = document.getElementById("add-task-btn");
 
-        // Array inicial de exemplo
-        let arrayTarefas = [
-            { texto: "Fazer um resumo", status: "todo" },
-            { texto: "Assistir uma aula", status: "doing" }
-        ];
+    function renderizarTarefasDashboard() {
+        if (!listContainerDashboard) return;
+        listContainerDashboard.innerHTML = "";
 
-        function renderizarTarefas() {
-            if (!listContainer) return;
-            listContainer.innerHTML = "";
+        // Ordena para mandar concluídas para baixo
+        let cópiaOrdenada = [...arrayTarefas].sort((a, b) => {
+            if (a.status === "done" && b.status !== "done") return 1;
+            if (a.status !== "done" && b.status === "done") return -1;
+            return 0;
+        });
 
-            // Organiza o array: joga os "done" (concluídos) para o final
-            arrayTarefas.sort((a, b) => {
-                if (a.status === "done" && b.status !== "done") return 1;
-                if (a.status !== "done" && b.status === "done") return -1;
-                return 0;
+        cópiaOrdenada.forEach((tarefa) => {
+            // Encontra o índice real no array original
+            const indiceReal = arrayTarefas.findIndex(t => t.texto === tarefa.texto && t.status === tarefa.status);
+
+            const item = document.createElement("div");
+            item.className = `task-item status-${tarefa.status}`;
+            item.innerHTML = `
+                <span class="task-text">${tarefa.texto}</span>
+                <select class="status-select" data-index="${indiceReal}">
+                    <option value="todo" ${tarefa.status === 'todo' ? 'selected' : ''}>Aguardando</option>
+                    <option value="doing" ${tarefa.status === 'doing' ? 'selected' : ''}>Em preparo</option>
+                    <option value="done" ${tarefa.status === 'done' ? 'selected' : ''}>Concluído</option>
+                </select>
+            `;
+
+            item.querySelector(".status-select").addEventListener("change", (e) => {
+                const idx = e.target.getAttribute("data-index");
+                arrayTarefas[idx].status = e.target.value;
+                salvarNoBanco();
+                renderizarTarefasDashboard();
             });
 
-            arrayTarefas.forEach((tarefa, index) => {
-                const item = document.createElement("div");
-                item.className = `task-item status-${tarefa.status}`;
+            listContainerDashboard.appendChild(item);
+        });
+    }
 
-                item.innerHTML = `
-                    <span class="task-text">${tarefa.texto}</span>
-                    <select class="status-select" data-index="${index}">
-                        <option value="todo" ${tarefa.status === 'todo' ? 'selected' : ''}>Aguardando</option>
-                        <option value="doing" ${tarefa.status === 'doing' ? 'selected' : ''}>Em preparo</option>
-                        <option value="done" ${tarefa.status === 'done' ? 'selected' : ''}>Concluído</option>
-                    </select>
-                `;
+    if (addTaskBtnDashboard) {
+        addTaskBtnDashboard.addEventListener("click", () => {
+            window.location.href = "tarefas.html";
+        });
+    }
 
-                // Monitora a mudança do seletor para trocar as cores e reordenar
-                const seletor = item.querySelector(".status-select");
-                seletor.addEventListener("change", (e) => {
-                    const idx = e.target.getAttribute("data-index");
-                    arrayTarefas[idx].status = e.target.value;
-                    renderizarTarefas(); // Atualiza a tela reordenando instantaneamente
-                });
+    // --- 5. RENDERIZAR TAREFAS POR COLUNA NA PÁGINA INDEPENDENTE ---
+    const listTodo = document.getElementById("list-todo");
+    const listDoing = document.getElementById("list-doing");
+    const listDone = document.getElementById("list-done");
+    const pageAddTaskBtn = document.getElementById("page-add-task-btn");
 
-                listContainer.appendChild(item);
+    function renderizarTarefasPaginaIndependente() {
+        if (!listTodo || !listDoing || !listDone) return;
+
+        // Limpa as três colunas
+        listTodo.innerHTML = "";
+        listDoing.innerHTML = "";
+        listDone.innerHTML = "";
+
+        arrayTarefas.forEach((tarefa, index) => {
+            const item = document.createElement("div");
+            item.className = `task-item status-${tarefa.status}`;
+            item.innerHTML = `
+                <span class="task-text">${tarefa.texto}</span>
+                <select class="status-select" data-index="${index}">
+                    <option value="todo" ${tarefa.status === 'todo' ? 'selected' : ''}>Aguardando</option>
+                    <option value="doing" ${tarefa.status === 'doing' ? 'selected' : ''}>Em preparo</option>
+                    <option value="done" ${tarefa.status === 'done' ? 'selected' : ''}>Concluído</option>
+                </select>
+            `;
+
+            item.querySelector(".status-select").addEventListener("change", (e) => {
+                const idx = e.target.getAttribute("data-index");
+                arrayTarefas[idx].status = e.target.value;
+                salvarNoBanco();
+                renderizarTarefasPaginaIndependente();
             });
-        }
 
-        // Evento para adicionar nova tarefa
-        if (addTaskBtn) {
-            addTaskBtn.addEventListener("click", () => {
-                const textoDigitado = prompt("Digite o nome da sua nova tarefa:");
-                if (textoDigitado && textoDigitado.trim() !== "") {
-                    arrayTarefas.push({ texto: textoDigitado.trim(), status: "todo" });
-                    renderizarTarefas();
-                }
-            });
-        }
+            // Injeta a tarefa diretamente na coluna certa
+            if (tarefa.status === "todo") listTodo.appendChild(item);
+            else if (tarefa.status === "doing") listDoing.appendChild(item);
+            else if (tarefa.status === "done") listDone.appendChild(item);
+        });
+    }
 
-        // Renderiza as tarefas pela primeira vez ao abrir a tela
-        renderizarTarefas();
+    if (pageAddTaskBtn) {
+        pageAddTaskBtn.addEventListener("click", () => {
+            const texto = prompt("Digite a nova tarefa:");
+            if (texto && texto.trim() !== "") {
+                arrayTarefas.push({ texto: texto.trim(), status: "todo" });
+                salvarNoBanco();
+                renderizarTarefasPaginaIndependente();
+            }
+        });
+    }
 
-        // --- LÓGICA DO CALENDÁRIO COMPLETO (MODAL) ---
-        const modal = document.getElementById("calendar-modal");
-        const btnOpen = document.getElementById("open-full-calendar");
-        const btnClose = document.getElementById("close-calendar");
-        const btnPrev = document.getElementById("prev-month");
-        const btnNext = document.getElementById("next-month");
-        
+    // Inicializa a lista da página que estiver aberta no momento
+    renderizarTarefasDashboard();
+    renderizarTarefasPaginaIndependente();
+
+    // --- LÓGICA DO CALENDÁRIO COMPLETO (MODAL) ---
+    const modal = document.getElementById("calendar-modal");
+    const btnOpen = document.getElementById("open-full-calendar");
+    const btnClose = document.getElementById("close-calendar");
+    const btnPrev = document.getElementById("prev-month");
+    const btnNext = document.getElementById("next-month");
+    
+    if(modal && btnOpen) {
+        const dataAtual = new Date();
         let mesVisivel = dataAtual.getMonth();
         let anoVisivel = dataAtual.getFullYear();
         const mesesCompletos = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
@@ -160,15 +222,15 @@ document.addEventListener("DOMContentLoaded", () => {
             modal.classList.add("open");
         });
 
-        btnClose.addEventListener("click", () => modal.classList.remove("open"));
+        if (btnClose) btnClose.addEventListener("click", () => modal.classList.remove("open"));
 
-        btnPrev.addEventListener("click", () => {
+        if (btnPrev) btnPrev.addEventListener("click", () => {
             mesVisivel--;
             if (mesVisivel < 0) { mesVisivel = 11; anoVisivel--; }
             renderizarCalendarioModal(mesVisivel, anoVisivel);
         });
 
-        btnNext.addEventListener("click", () => {
+        if (btnNext) btnNext.addEventListener("click", () => {
             mesVisivel++;
             if (mesVisivel > 11) { mesVisivel = 0; anoVisivel++; }
             renderizarCalendarioModal(mesVisivel, anoVisivel);

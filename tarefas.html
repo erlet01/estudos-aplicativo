@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciador de Tarefas</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <link rel="stylesheet" href="dashboard.css">
+    
+    <link rel="stylesheet" href="tarefas.css">
+</head>
+<body>
+
+    <div class="app-screen">
+        <div class="sphere sphere-4"></div>
+        
+        <div class="dashboard-content">
+            <header class="dashboard-header">
+                <div class="header-top-row">
+                    <h1 style="color: white; font-size: 30px; font-weight: 700;">Minhas Tarefas</h1>
+                    <button id="page-add-task-btn" style="background:none; border:none; color:#7c3aed; cursor:pointer;">
+                        <i class="material-icons" style="font-size: 32px;">add_circle</i>
+                    </button>
+                </div>
+            </header>
+
+            <main class="main-stats" style="margin-top: 15px;">
+                <div class="kanban-container">
+                    
+                    <div class="kanban-column">
+                        <div class="column-title"><span class="dot todo"></span> Aguardando</div>
+                        <div class="kanban-list" id="list-todo"></div>
+                    </div>
+
+                    <div class="kanban-column">
+                        <div class="column-title"><span class="dot doing"></span> Em Preparo</div>
+                        <div class="kanban-list" id="list-doing"></div>
+                    </div>
+
+                    <div class="kanban-column">
+                        <div class="column-title"><span class="dot done"></span> Concluído</div>
+                        <div class="kanban-list" id="list-done"></div>
+                    </div>
+
+                </div>
+            </main>
+
+            <nav class="bottom-nav">
+                <i class="material-icons" id="nav-home">home</i>
+                <i class="material-icons active" id="nav-tasks">assignment</i>
+                <i class="material-icons">settings</i>
+            </nav>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+/* --- CONFIGURAÇÃO DE ESPAÇAMENTO GERAL DO TOPO --- */
+
+/* Estiliza o cabeçalho específico desta página para desgrudar do topo */
+.dashboard-header {
+    padding-top: 35px; /* Empurra um pouco mais para baixo do topo da tela */
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    padding-left: 20px;  /* Afasta o título "Minhas Tarefas" do canto esquerdo */
+    padding-right: 20px; /* Afasta o botão "+" do canto direito */
+    box-sizing: border-box; /* Garante que os paddings não quebrem a largura da tela */
+}
+
+/* Alinha perfeitamente o título "Minhas Tarefas" e o botão de "+" na mesma linha */
+.dashboard-header .header-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+/* Garante que o botão de + não fique desalinhado */
+#page-add-task-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+}
+
+
+/* --- ESTILOS DO CONTEÚDO (KANBAN) --- */
+
+/* Container das 3 colunas */
+.kanban-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Espaço confortável entre as caixas grandes */
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    padding-bottom: 100px; /* Garante que o menu de baixo não tape nada */
+    box-sizing: border-box;
+}
+
+/* Oculta a barra de rolagem */
+.kanban-container::-webkit-scrollbar {
+    width: 0px;
+}
+
+/* Caixas grandes de cada estado */
+.kanban-column {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    padding: 20px; /* Mais espaço interno para os itens não ficarem colados */
+}
+
+/* Títulos: AGUARDANDO, EM PREPARO, CONCLUÍDO */
+.column-title {
+    color: #94a3b8;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 16px; /* Espaço abaixo do título antes de começar os cards */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Pontinhos de status */
+.column-title .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+.column-title .dot.todo { background: #64748b; }
+.column-title .dot.doing { background: #7c3aed; }
+.column-title .dot.done { background: #22c55e; }
+
+/* Espaço onde os cards se empilham */
+.kanban-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+
+/* --- CORREÇÃO E ALINHAMENTO INTERNO DOS CARDS --- */
+.kanban-list .task-item {
+    background: #130924 !important; /* Força o fundo roxo escuro correto */
+    margin-top: 0;
+    padding: 16px 20px !important; /* Aumenta o espaço dentro do card para o texto não ficar apertado */
+    border-radius: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Alinha o texto e o botão select perfeitamente no centro horizontal */
+    box-sizing: border-box;
+    width: 100%;
+}
+
+/* Texto da tarefa */
+.kanban-list .task-text {
+    color: #ffffff;
+    font-size: 15px; /* Aumentado ligeiramente para melhor leitura */
+    font-weight: 500;
+    line-height: 1.4;
+    padding-right: 15px;
+}
+
+/* Botão drop-down de seleção de status */
+.kanban-list .status-select {
+    padding: 8px 14px !important; /* Botão mais gordinho e elegante */
+    font-size: 13px;
+    border-radius: 10px;
+    font-weight: 600;
+    flex-shrink: 0; /* Impede que o botão seja esmagado pelo texto */
+    height: 36px; /* Altura fixa ideal */
+    display: flex;
+    align-items: center;
+}
