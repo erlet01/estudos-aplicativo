@@ -13,23 +13,47 @@
         <div class="sphere sphere-4"></div>
         
         <div class="dashboard-content">
-            <header class="dashboard-header">
-                <p id="current-day-name">Segunda-feira</p>
-                <div class="calendar-strip">
-    <div class="day" data-day="1"><small>S</small><strong class="num">-</strong></div>
-    <div class="day" data-day="2"><small>T</small><strong class="num">-</strong></div>
-    <div class="day" data-day="3"><small>Q</small><strong class="num">-</strong></div>
-    <div class="day" data-day="4"><small>Q</small><strong class="num">-</strong></div>
-    <div class="day" data-day="5"><small>S</small><strong class="num">-</strong></div>
-    <div class="day" data-day="6"><small>S</small><strong class="num">-</strong></div>
-    <div class="day" data-day="0"><small>D</small><strong class="num">-</strong></div>
+                <div class="dashboard-header">
+    <div class="header-top-row">
+        <h1 id="current-day-name"></h1>
+        <div class="month-selector" id="open-full-calendar">
+            <span id="current-month-year">JUL 2026</span>
+            <i class="material-icons">expand_more</i>
+        </div>
+    </div>
+
+    <div class="calendar-strip">
+        <div class="day" data-day="1"><small>S</small><strong class="num">-</strong></div>
+        <div class="day" data-day="2"><small>T</small><strong class="num">-</strong></div>
+        <div class="day" data-day="3"><small>Q</small><strong class="num">-</strong></div>
+        <div class="day" data-day="4"><small>Q</small><strong class="num">-</strong></div>
+        <div class="day" data-day="5"><small>S</small><strong class="num">-</strong></div>
+        <div class="day" data-day="6"><small>S</small><strong class="num">-</strong></div>
+        <div class="day" data-day="0"><small>D</small><strong class="num">-</strong></div>
+    </div>
+</div>
+
+<div class="calendar-modal" id="calendar-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button id="prev-month"><i class="material-icons">chevron_left</i></button>
+            <h3 id="modal-month-title">Julho 2026</h3>
+            <button id="next-month"><i class="material-icons">chevron_right</i></button>
+        </div>
+        <div class="modal-weekdays">
+            <div>D</div><div>S</div><div>T</div><div>Q</div><div>Q</div><div>S</div><div>S</div>
+        </div>
+        <div class="modal-days-grid" id="modal-days-grid">
+            </div>
+        <button class="close-modal-btn" id="close-calendar">Fechar</button>
+    </div>
 </div>
             </header>
 
             <main class="main-stats">
                 <div class="welcome-msg">
                     <h2>Olá, Letícia!</h2>
-                    <span>O que vamos aprender hoje?</span>
+                    <span>Hoje é dia de focar em</span>
                 </div>
             </main>
 
