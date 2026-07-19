@@ -1,0 +1,214 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    background-color: #0b0314; /* Fundo super escuro */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* Container do Celular */
+.app-screen {
+    position: relative;
+    width: 100%;
+    max-width: 410px;
+    height: 100%;
+    max-height: 820px;
+    background: linear-gradient(180deg, #1f0b3d 0%, #0d041a 100%);
+    border-radius: 30px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- Formas Fluídas de Fundo (Estilo da Foto) --- */
+.bg-wave {
+    position: absolute;
+    top: -10%;
+    left: -20%;
+    width: 150%;
+    height: 45%;
+    background: radial-gradient(circle at 30% 20%, #4c1d95 0%, #2e1065 70%);
+    border-radius: 0 0 50% 60%;
+    transform: rotate(-5deg);
+    z-index: 1;
+}
+
+/* Esferas 3D Flutuantes */
+.sphere {
+    position: absolute;
+    border-radius: 50%;
+    z-index: 2;
+}
+
+.sphere-1 {
+    width: 100px;
+    height: 100px;
+    top: 5%;
+    left: -10px;
+    background: radial-gradient(circle at 30% 30%, #a78bfa, #6d28d9);
+    box-shadow: -5px 10px 20px rgba(0,0,0,0.4);
+}
+
+.sphere-2 {
+    width: 70px;
+    height: 70px;
+    top: 22%;
+    right: 20px;
+    background: radial-gradient(circle at 30% 30%, #c084fc, #581c87);
+    box-shadow: 5px 10px 20px rgba(0,0,0,0.3);
+}
+
+.sphere-3 {
+    width: 120px;
+    height: 120px;
+    bottom: 25%;
+    left: -40px;
+    background: radial-gradient(circle at 30% 30%, #3b0764, #1e1b4b);
+    box-shadow: -5px 10px 25px rgba(0,0,0,0.5);
+}
+
+/* --- Conteúdo por cima do fundo --- */
+.content-container {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    height: 100%;
+    padding: 40px 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Topo do App */
+.app-header {
+    color: white;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.study-icon {
+    font-size: 50px !important;
+    text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.app-header h1 {
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.app-header p {
+    font-size: 14px;
+    color: #ddd;
+    margin-top: 4px;
+}
+
+/* Card Branco de Login (Igual ao da foto) */
+.login-card {
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    padding: 25px;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    width: 100%;
+}
+
+.login-card h2 {
+    color: #2e1065;
+    font-size: 22px;
+    margin-bottom: 20px;
+}
+
+.input-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #6b7280;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    background-color: #f9fafb;
+    color: #111827;
+    font-size: 14px;
+    outline: none;
+    transition: 0.2s;
+}
+
+.input-group input:focus {
+    border-color: #7c3aed;
+    background-color: #fff;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #4b5563;
+    margin-top: 10px;
+}
+
+/* Área inferior com o seu Botão */
+.user-action-area {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.leticia-profile-btn {
+    background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+    border: none;
+    width: 100%;
+    padding: 12px;
+    border-radius: 16px;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(124, 58, 237, 0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.leticia-profile-btn:active {
+    transform: scale(0.98);
+    box-shadow: 0 4px 10px rgba(124, 58, 237, 0.2);
+}
+
+.avatar {
+    width: 32px;
+    height: 32px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.avatar .material-icons {
+    font-size: 20px;
+}
