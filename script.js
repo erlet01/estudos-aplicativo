@@ -14,7 +14,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const mesesAbrev = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
         const diasSemana = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
 
-        // Objeto com o seu cronograma mapeado por número do dia (0 = Domingo, 1 = Segunda, etc.)
         const cronogramaEstudos = {
             1: "Arquitetura de Computadores e Sistemas Operacionais",
             2: "Engenharia de Software",
@@ -27,11 +26,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const numeroDiaHoje = dataAtual.getDay(); 
 
-        // Atualiza o dia de hoje e o mês no topo
         dayNameDisplay.innerText = diasSemana[numeroDiaHoje];
         document.getElementById("current-month-year").innerText = `${mesesAbrev[dataAtual.getMonth()]} ${dataAtual.getFullYear()}`;
 
-        // Injeta a matéria do dia correspondente no card
         const subjectDisplay = document.getElementById("schedule-subject");
         const iconDisplay = document.getElementById("schedule-icon-day");
         
@@ -39,16 +36,14 @@ document.addEventListener("DOMContentLoaded", () => {
             subjectDisplay.innerHTML = cronogramaEstudos[numeroDiaHoje];
         }
         
-        // Se for domingo, troca o ícone de livro por um de hotel/descanso
         const subText = document.querySelector(".schedule-info p");
-        
         if (numeroDiaHoje === 0) {
             if (iconDisplay) iconDisplay.innerText = "king_bed";
             if (subText) subText.style.display = "none";
         } else {
-            if (subText) subText.style.display = "block"; // Garante que aparece nos dias de semana
+            if (subText) subText.style.display = "block";
         }
-        // Preenche a barra do mini calendário semanal
+
         const elementoHoje = document.querySelector(`.day[data-day="${numeroDiaHoje}"]`);
         if (elementoHoje) elementoHoje.classList.add("active");
 
@@ -61,6 +56,66 @@ document.addEventListener("DOMContentLoaded", () => {
             if (numDisplay) numDisplay.innerText = dataAlvo.getDate();
         });
 
+        // --- SISTEMA DINÂMICO DE TAREFAS (ORDENAÇÃO AUTOMÁTICA) ---
+        const listContainer = document.getElementById("tasks-list");
+        const addTaskBtn = document.getElementById("add-task-btn");
+
+        // Array inicial de exemplo
+        let arrayTarefas = [
+            { texto: "Fazer um resumo", status: "todo" },
+            { texto: "Assistir uma aula", status: "doing" }
+        ];
+
+        function renderizarTarefas() {
+            if (!listContainer) return;
+            listContainer.innerHTML = "";
+
+            // Organiza o array: joga os "done" (concluídos) para o final
+            arrayTarefas.sort((a, b) => {
+                if (a.status === "done" && b.status !== "done") return 1;
+                if (a.status !== "done" && b.status === "done") return -1;
+                return 0;
+            });
+
+            arrayTarefas.forEach((tarefa, index) => {
+                const item = document.createElement("div");
+                item.className = `task-item status-${tarefa.status}`;
+
+                item.innerHTML = `
+                    <span class="task-text">${tarefa.texto}</span>
+                    <select class="status-select" data-index="${index}">
+                        <option value="todo" ${tarefa.status === 'todo' ? 'selected' : ''}>Aguardando</option>
+                        <option value="doing" ${tarefa.status === 'doing' ? 'selected' : ''}>Em preparo</option>
+                        <option value="done" ${tarefa.status === 'done' ? 'selected' : ''}>Concluído</option>
+                    </select>
+                `;
+
+                // Monitora a mudança do seletor para trocar as cores e reordenar
+                const seletor = item.querySelector(".status-select");
+                seletor.addEventListener("change", (e) => {
+                    const idx = e.target.getAttribute("data-index");
+                    arrayTarefas[idx].status = e.target.value;
+                    renderizarTarefas(); // Atualiza a tela reordenando instantaneamente
+                });
+
+                listContainer.appendChild(item);
+            });
+        }
+
+        // Evento para adicionar nova tarefa
+        if (addTaskBtn) {
+            addTaskBtn.addEventListener("click", () => {
+                const textoDigitado = prompt("Digite o nome da sua nova tarefa:");
+                if (textoDigitado && textoDigitado.trim() !== "") {
+                    arrayTarefas.push({ texto: textoDigitado.trim(), status: "todo" });
+                    renderizarTarefas();
+                }
+            });
+        }
+
+        // Renderiza as tarefas pela primeira vez ao abrir a tela
+        renderizarTarefas();
+
         // --- LÓGICA DO CALENDÁRIO COMPLETO (MODAL) ---
         const modal = document.getElementById("calendar-modal");
         const btnOpen = document.getElementById("open-full-calendar");
@@ -70,7 +125,6 @@ document.addEventListener("DOMContentLoaded", () => {
         
         let mesVisivel = dataAtual.getMonth();
         let anoVisivel = dataAtual.getFullYear();
-
         const mesesCompletos = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
 
         function renderizarCalendarioModal(mes, ano) {

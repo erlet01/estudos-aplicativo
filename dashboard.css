@@ -379,3 +379,98 @@ body {
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
+/* Container Geral de Tarefas */
+.tasks-section {
+    margin-top: 25px;
+    width: 100%;
+}
+
+.tasks-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.tasks-header h4 {
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.tasks-header button {
+    background: none;
+    border: none;
+    color: #7c3aed;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+/* Lista e Card de Tarefa */
+.tasks-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.task-item {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 14px 16px;
+    border-radius: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.task-text {
+    color: #e2e8f0;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* Seletor de Progresso (Estilo do Botão) */
+.status-select {
+    background: #1e1b4b;
+    color: #ffffff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+    transition: background 0.3s ease;
+}
+
+/* --- CORES DOS ESTADOS DE PROGRESSO --- */
+.task-item.status-todo {
+    border-left: 4px solid #64748b; /* Borda cinza */
+}
+.task-item.status-todo .status-select {
+    background: #334155; /* Botão cinza */
+    color: #cbd5e1;
+}
+
+.task-item.status-doing {
+    border-left: 4px solid #4c1d95; /* Borda roxo escuro */
+}
+.task-item.status-doing .status-select {
+    background: #4c1d95; /* Botão roxo escuro */
+    color: #ddd6fe;
+}
+
+.task-item.status-done {
+    border-left: 4px solid #22c55e; /* Borda verde brilhante */
+    opacity: 0.6; /* Dá o efeito visual de item arquivado/concluído */
+}
+.task-item.status-done .task-text {
+    text-decoration: line-through; /* Risca o texto da tarefa */
+    color: #64748b;
+}
+.task-item.status-done .status-select {
+    background: #166534; /* Botão verde escuro */
+    color: #4ade80;
+}
