@@ -326,3 +326,56 @@ body {
     font-weight: 600;
     cursor: pointer;
 }
+/* Estilização do Título "Hoje é dia de focar em" */
+.focus-title {
+    color: #94a3b8;
+    font-size: 15px;
+    font-weight: 500;
+    display: block;
+    margin-top: 5px;
+}
+
+/* Card do Cronograma Dinâmico */
+.schedule-card {
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.1) 0%, rgba(255, 255, 255, 0.03) 100%);
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    border: 1px solid rgba(124, 58, 237, 0.2);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Ícone Redondo */
+.schedule-icon {
+    width: 48px;
+    height: 48px;
+    background: rgba(124, 58, 237, 0.2);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.schedule-icon i {
+    color: #a78bfa;
+    font-size: 24px;
+}
+
+/* Textos do Card */
+.schedule-info h3 {
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.schedule-info p {
+    color: #64748b;
+    font-size: 12px;
+    margin-top: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}

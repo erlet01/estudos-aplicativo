@@ -7,19 +7,48 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // 2. CONTROLE DO CALENDÁRIO
+    // 2. CONTROLE DO CALENDÁRIO E CRONOGRAMA
     const dayNameDisplay = document.getElementById("current-day-name");
     if (dayNameDisplay) {
         const dataAtual = new Date();
         const mesesAbrev = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
         const diasSemana = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
 
-        // Atualiza Domingo e JUL 2026 no topo
-        dayNameDisplay.innerText = diasSemana[dataAtual.getDay()];
+        // Objeto com o seu cronograma mapeado por número do dia (0 = Domingo, 1 = Segunda, etc.)
+        const cronogramaEstudos = {
+            1: "Arquitetura de Computadores e Sistemas Operacionais",
+            2: "Engenharia de Software",
+            3: "Práticas de Programação",
+            4: "Carreira e Futuro;<br>Projeto Integrador: Carreira e Futuro",
+            5: "Cultura; Atividade Extensionista 1",
+            6: "Anotar no Fichário; Realizar Atividades",
+            0: "Descanso"
+        };
+
+        const numeroDiaHoje = dataAtual.getDay(); 
+
+        // Atualiza o dia de hoje e o mês no topo
+        dayNameDisplay.innerText = diasSemana[numeroDiaHoje];
         document.getElementById("current-month-year").innerText = `${mesesAbrev[dataAtual.getMonth()]} ${dataAtual.getFullYear()}`;
 
+        // Injeta a matéria do dia correspondente no card
+        const subjectDisplay = document.getElementById("schedule-subject");
+        const iconDisplay = document.getElementById("schedule-icon-day");
+        
+        if (subjectDisplay) {
+            subjectDisplay.innerHTML = cronogramaEstudos[numeroDiaHoje];
+        }
+        
+        // Se for domingo, troca o ícone de livro por um de hotel/descanso
+        const subText = document.querySelector(".schedule-info p");
+        
+        if (numeroDiaHoje === 0) {
+            if (iconDisplay) iconDisplay.innerText = "king_bed";
+            if (subText) subText.style.display = "none";
+        } else {
+            if (subText) subText.style.display = "block"; // Garante que aparece nos dias de semana
+        }
         // Preenche a barra do mini calendário semanal
-        const numeroDiaHoje = dataAtual.getDay(); 
         const elementoHoje = document.querySelector(`.day[data-day="${numeroDiaHoje}"]`);
         if (elementoHoje) elementoHoje.classList.add("active");
 
@@ -52,20 +81,17 @@ document.addEventListener("DOMContentLoaded", () => {
             const primeiroDiaMês = new Date(ano, mes, 1).getDay();
             const totalDiasMês = new Date(ano, mes + 1, 0).getDate();
 
-            // Espaços vazios antes do dia 1
             for (let i = 0; i < primeiroDiaMês; i++) {
                 const divVazia = document.createElement("div");
                 divVazia.className = "modal-day empty";
                 grid.appendChild(divVazia);
             }
 
-            // Cria os números dos dias do mês inteiro
             for (let dia = 1; dia <= totalDiasMês; dia++) {
                 const divDia = document.createElement("div");
                 divDia.className = "modal-day";
                 divDia.innerText = dia;
 
-                // Destaca se for o dia de hoje real
                 if (dia === dataAtual.getDate() && mes === dataAtual.getMonth() && ano === dataAtual.getFullYear()) {
                     divDia.classList.add("today");
                 }
@@ -73,7 +99,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
-        // Abre e fecha o modal
         btnOpen.addEventListener("click", () => {
             mesVisivel = dataAtual.getMonth();
             anoVisivel = dataAtual.getFullYear();
@@ -83,7 +108,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         btnClose.addEventListener("click", () => modal.classList.remove("open"));
 
-        // Navegação de meses anteriores e próximos
         btnPrev.addEventListener("click", () => {
             mesVisivel--;
             if (mesVisivel < 0) { mesVisivel = 11; anoVisivel--; }
