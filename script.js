@@ -1,32 +1,49 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const ball = document.getElementById("loading-ball");
-    const splashScreen = document.getElementById("splash-screen");
-    const loginScreen = document.getElementById("login-screen");
-    const motivationScreen = document.getElementById("motivation-screen");
+    // 1. CONTROLAR O CLIQUE NO BOTÃO DA LETÍCIA
     const leticiaBtn = document.getElementById("leticia-btn");
+    if (leticiaBtn) {
+        leticiaBtn.addEventListener("click", () => {
+            window.location.href = "dashboard.html";
+        });
+    }
 
-    // PASSO 1: Espera 2.5 segundos com a bola piscando
-    setTimeout(() => {
-        // PASSO 2: Adiciona a classe que faz a bola expandir
-        ball.classList.add("expand");
-
-        // PASSO 3: Quando a bola terminar de cobrir tudo (600ms), mostra a tela de login
-        setTimeout(() => {
-            splashScreen.classList.remove("active");
-            loginScreen.classList.add("active");
-        }, 600); // Esse tempo bate com o 'transition' do CSS da bola
-
-    }, 2500);
-
-    // PASSO 4: Evento de clique no botão da Letícia
-    leticiaBtn.addEventListener("click", () => {
-        // Esconde a tela de login e mostra a tela motivacional
-        loginScreen.classList.remove("active");
-        motivationScreen.classList.add("active");
+    // 2. CONTROLAR O CALENDÁRIO COM NÚMEROS DINÂMICOS
+    const dayNameDisplay = document.getElementById("current-day-name");
+    
+    if (dayNameDisplay) {
+        const dataAtual = new Date();
         
-        // Aqui o app simularia que terminou de carregar após 3 segundos
-        setTimeout(() => {
-            alert("App Iniciado! Bons estudos, Letícia! 📚✨");
-        }, 3000);
-    });
+        const diasSemana = [
+            "Domingo", "Segunda-feira", "Terça-feira", 
+            "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"
+        ];
+
+        // Mostra o nome do dia de hoje no topo
+        dayNameDisplay.innerText = diasSemana[dataAtual.getDay()];
+
+        // Ativa o dia atual na barra do calendário
+        const numeroDiaHoje = dataAtual.getDay(); 
+        const elementoHoje = document.querySelector(`.day[data-day="${numeroDiaHoje}"]`);
+        if (elementoHoje) {
+            elementoHoje.classList.add("active");
+        }
+
+        // Preenche o número correto de cada dia da semana na barra
+        const todosOsDias = document.querySelectorAll('.day');
+        todosOsDias.forEach(diaDom => {
+            const alvoDiaSemana = parseInt(diaDom.getAttribute('data-day'));
+            
+            // Calcula a diferença de dias entre o dia do botão e o dia de hoje
+            let diferenca = alvoDiaSemana - numeroDiaHoje;
+            
+            const dataAlvo = new Date(dataAtual);
+            dataAlvo.setDate(dataAtual.getDate() + diferenca);
+            
+            // Coloca o número do dia calculado dentro da tag strong .num
+            const numDisplay = diaDom.querySelector('.num');
+            if (numDisplay) {
+                numDisplay.innerText = dataAlvo.getDate();
+            }
+        });
+    }
 });

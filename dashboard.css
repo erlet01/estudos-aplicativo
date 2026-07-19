@@ -1,0 +1,187 @@
+/* 1. RESET DE BORDAS E FONTES */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    background-color: #0b0314;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* 2. ESTRUTURA DO CELULAR (FORÇANDO ALINHAMENTO NO TOPO) */
+.app-screen {
+    position: relative;
+    width: 100%;
+    max-width: 410px;
+    height: 100%;
+    max-height: 820px;
+    border-radius: 30px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    overflow: hidden;
+    background-color: #0b0314;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Alinha o conteúdo estritamente no topo */
+}
+
+/* 3. A TELA DA DASHBOARD */
+.dashboard {
+    width: 100%;
+    height: 100%;
+    padding: 25px 20px 20px 20px; /* Margem sutil no topo para não colar na carcaça do celular */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Remove espaçamentos automáticos que jogam pro centro */
+}
+
+/* 4. CONTEÚDO DA DASHBOARD */
+.dashboard-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    flex-grow: 1; /* Ocupa o espaço útil superior */
+}
+
+/* 5. CABEÇALHO DO CALENDÁRIO (FIXADO NO TOPO) */
+.dashboard-header {
+    width: 100%;
+    margin-bottom: 25px; /* Define exatamente o espaço fixo antes do próximo bloco */
+}
+
+#current-day-name {
+    font-size: 26px;
+    font-weight: 700;
+    color: #ffffff;
+    text-transform: capitalize;
+    margin-bottom: 12px;
+    padding-left: 2px;
+}
+
+/* FAIXA DO CALENDÁRIO */
+.calendar-strip {
+    display: flex;
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 12px 10px;
+    border-radius: 20px;
+    border: 1px solid rgba(124, 58, 237, 0.2);
+}
+
+.day {
+    width: 45px;
+    height: 55px; /* Aumentamos um pouco a altura para caber os dois elementos */
+    display: flex;
+    flex-direction: column; /* Coloca a letra em cima e o número embaixo */
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    color: #94a3b8;
+    gap: 4px; /* Espaço sutil entre a letra e o número */
+    transition: 0.3s;
+}
+
+.day small {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    opacity: 0.7;
+}
+
+/* Número do dia (maior) */
+.day .num {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.day.active {
+    background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4);
+    transform: scale(1.05);
+}
+
+.day.active small {
+    opacity: 0.9;
+}
+
+/* 6. BLOCO DE CONTEÚDO (LOGO ABAIXO DO CALENDÁRIO) */
+.main-stats {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin-bottom: auto; /* Truque CSS: empurra o menu de navegação lá para o rodapé */
+}
+
+.welcome-msg h2 {
+    font-size: 28px;
+    color: white;
+}
+
+.welcome-msg span {
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+/* CARD DE TAREFA */
+.task-card {
+    background: rgba(255, 255, 255, 0.05);
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background: #22c55e;
+    border-radius: 50%;
+    margin-left: auto;
+}
+
+/* 7. MENU INFERIOR FIXADO EM BAIXO */
+.bottom-nav {
+    height: 70px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background: rgba(13, 4, 26, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 25px 25px 0 0;
+    margin: 0 -20px -20px -20px; /* Compensa o padding da dashboard para colar nas bordas */
+}
+
+.bottom-nav .material-icons {
+    color: #4b5563;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+.bottom-nav .active {
+    color: #7c3aed;
+}
+
+/* ESFERA DE FUNDO */
+.sphere-4 {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    top: -60px;
+    right: -60px;
+    background: radial-gradient(circle at 30% 30%, rgba(124, 58, 237, 0.15), transparent);
+    filter: blur(20px);
+    pointer-events: none;
+}

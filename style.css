@@ -30,7 +30,7 @@ body {
     flex-direction: column;
 }
 
-/* --- Formas Fluídas de Fundo (Estilo da Foto) --- */
+/* --- Formas Fluídas de Fundo --- */
 .bg-wave {
     position: absolute;
     top: -10%;
@@ -71,7 +71,7 @@ body {
 .sphere-3 {
     width: 120px;
     height: 120px;
-    bottom: 25%;
+    bottom: 10%;
     left: -40px;
     background: radial-gradient(circle at 30% 30%, #3b0764, #1e1b4b);
     box-shadow: -5px 10px 25px rgba(0,0,0,0.5);
@@ -93,122 +93,111 @@ body {
 .app-header {
     color: white;
     text-align: center;
-    margin-top: 20px;
+    margin-top: 40px;
 }
 
 .study-icon {
-    font-size: 50px !important;
+    font-size: 60px !important;
     text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    margin-bottom: 5px;
 }
 
 .app-header h1 {
-    font-size: 28px;
+    font-size: 32px;
     font-weight: 700;
 }
 
 .app-header p {
-    font-size: 14px;
-    color: #ddd;
-    margin-top: 4px;
+    font-size: 15px;
+    color: #cbd5e1;
+    margin-top: 6px;
 }
 
-/* Card Branco de Login (Igual ao da foto) */
+/* Card Branco Centralizado */
 .login-card {
     background-color: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
     border-radius: 24px;
     padding: 25px;
-    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.3);
     width: 100%;
+    margin-bottom: 40px;
 }
 
 .login-card h2 {
     color: #2e1065;
-    font-size: 22px;
-    margin-bottom: 20px;
-}
-
-.input-group {
-    margin-bottom: 15px;
-    text-align: left;
-}
-
-.input-group label {
-    display: block;
-    font-size: 12px;
-    font-weight: 600;
-    color: #6b7280;
-    margin-bottom: 5px;
+    font-size: 16px;
     text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 18px;
+    font-weight: 600;
 }
 
-.input-group input {
-    width: 100%;
-    padding: 12px 15px;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    background-color: #f9fafb;
-    color: #111827;
-    font-size: 14px;
-    outline: none;
-    transition: 0.2s;
-}
-
-.input-group input:focus {
-    border-color: #7c3aed;
-    background-color: #fff;
-}
-
-.remember-me {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 13px;
-    color: #4b5563;
-    margin-top: 10px;
-}
-
-/* Área inferior com o seu Botão */
-.user-action-area {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin-bottom: 10px;
-}
-
+/* O Novo Botão de Perfil da Letícia */
 .leticia-profile-btn {
     background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
     border: none;
     width: 100%;
-    padding: 12px;
-    border-radius: 16px;
+    padding: 16px;
+    border-radius: 18px;
     color: white;
-    font-size: 16px;
-    font-weight: 600;
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 12px;
     cursor: pointer;
-    box-shadow: 0 8px 20px rgba(124, 58, 237, 0.4);
+    box-shadow: 0 8px 20px rgba(124, 58, 237, 0.3);
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.leticia-profile-btn:active {
-    transform: scale(0.98);
-    box-shadow: 0 4px 10px rgba(124, 58, 237, 0.2);
+.leticia-profile-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(124, 58, 237, 0.4);
 }
 
+.leticia-profile-btn:active {
+    transform: scale(0.97);
+}
+
+/* Avatar dentro do botão */
 .avatar {
-    width: 32px;
-    height: 32px;
+    width: 46px;
+    height: 46px;
     background-color: rgba(255, 255, 255, 0.2);
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-right: 15px;
 }
 
 .avatar .material-icons {
-    font-size: 20px;
+    font-size: 26px;
+}
+
+/* Textos internos do perfil */
+.user-info {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    flex-grow: 1; /* Faz ocupar o espaço e empurrar a seta */
+}
+
+.user-name {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.user-status {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+    margin-top: 2px;
+}
+
+/* Seta na ponta direita */
+.arrow-icon {
+    font-size: 16px !important;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.footer-space {
+    height: 40px; /* Apenas para manter o equilíbrio visual da tela */
 }
