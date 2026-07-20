@@ -9,23 +9,47 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("meuCronogramaTarefas", JSON.stringify(arrayTarefas));
     }
 
-    // --- 2. NAVEGAÇÃO ENTRE TELAS ---
+    // --- VARIÁVEIS PARA CONTROLE DE EXCLUSÃO ---
+    let indiceParaDeletar = null;
+    const confirmModal = document.getElementById("confirm-modal");
+    const btnCancelDelete = document.getElementById("btn-cancel-delete");
+    const btnConfirmDelete = document.getElementById("btn-confirm-delete");
+
+    if (btnCancelDelete && confirmModal) {
+        btnCancelDelete.addEventListener("click", () => {
+            confirmModal.classList.remove("open");
+            renderizarTarefasPaginaIndependente(); // Reseta o card
+        });
+    }
+
+    if (btnConfirmDelete && confirmModal) {
+        btnConfirmDelete.addEventListener("click", () => {
+            if (indiceParaDeletar !== null) {
+                arrayTarefas.splice(indiceParaDeletar, 1);
+                salvarNoBanco();
+                renderizarTarefasPaginaIndependente();
+                renderizarTarefasDashboard();
+                confirmModal.classList.remove("open");
+                indiceParaDeletar = null;
+            }
+        });
+    }
+
+    // --- 2. NAVEGAÇÃO ENTRE TELAS (CORRIGIDO) ---
     const leticiaBtn = document.getElementById("leticia-btn");
     if (leticiaBtn) {
-        leticiaBtn.addEventListener("click", () => { window.location.href = "dashboard.html"; });
+        leticiaBtn.addEventListener("click", () => { 
+            window.location.href = "dashboard.html"; 
+        });
     }
 
     const navHome = document.getElementById("nav-home");
     const navTasks = document.getElementById("nav-tasks");
 
-    if (navHome) {
-        navHome.addEventListener("click", () => { window.location.href = "dashboard.html"; });
-    }
-    if (navTasks) {
-        navTasks.addEventListener("click", () => { window.location.href = "tarefas.html"; });
-    }
+    if (navHome) navHome.addEventListener("click", () => { window.location.href = "dashboard.html"; });
+    if (navTasks) navTasks.addEventListener("click", () => { window.location.href = "tarefas.html"; });
 
-    // --- 3. LÓGICA DO CALENDÁRIO E CRONOGRAMA (DASHBOARD) ---
+    // --- 3. LÓGICA DO CALENDÁRIO E CRONOGRAMA ---
     const dayNameDisplay = document.getElementById("current-day-name");
     if (dayNameDisplay) {
         const dataAtual = new Date();
@@ -43,37 +67,12 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
         const numeroDiaHoje = dataAtual.getDay(); 
-
         dayNameDisplay.innerText = diasSemana[numeroDiaHoje];
         const monthYearEl = document.getElementById("current-month-year");
-        if (monthYearEl) {
-            monthYearEl.innerText = `${mesesAbrev[dataAtual.getMonth()]} ${dataAtual.getFullYear()}`;
-        }
+        if (monthYearEl) monthYearEl.innerText = `${mesesAbrev[dataAtual.getMonth()]} ${dataAtual.getFullYear()}`;
 
         const subjectDisplay = document.getElementById("schedule-subject");
-        const iconDisplay = document.getElementById("schedule-icon-day");
-        
         if (subjectDisplay) subjectDisplay.innerHTML = cronogramaEstudos[numeroDiaHoje];
-        
-        const subText = document.querySelector(".schedule-info p");
-        if (numeroDiaHoje === 0) {
-            if (iconDisplay) iconDisplay.innerText = "king_bed";
-            if (subText) subText.style.display = "none";
-        } else {
-            if (subText) subText.style.display = "block";
-        }
-
-        const elementoHoje = document.querySelector(`.day[data-day="${numeroDiaHoje}"]`);
-        if (elementoHoje) elementoHoje.classList.add("active");
-
-        document.querySelectorAll('.day').forEach(diaDom => {
-            const alvoDiaSemana = parseInt(diaDom.getAttribute('data-day'));
-            let diferenca = alvoDiaSemana - numeroDiaHoje;
-            const dataAlvo = new Date(dataAtual);
-            dataAlvo.setDate(dataAtual.getDate() + diferenca);
-            const numDisplay = diaDom.querySelector('.num');
-            if (numDisplay) numDisplay.innerText = dataAlvo.getDate();
-        });
     }
 
     // --- 4. RENDERIZAR TAREFAS NA DASHBOARD PRINCIPAL ---
@@ -119,21 +118,23 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (addTaskBtnDashboard) {
-        addTaskBtnDashboard.addEventListener("click", () => {
-            window.location.href = "tarefas.html";
-        });
+        addTaskBtnDashboard.addEventListener("click", () => { window.location.href = "tarefas.html"; });
     }
 
-    // --- 5. RENDERIZAR TAREFAS POR COLUNA NA PÁGINA INDEPENDENTE ---
+    // --- 5. RENDERIZAR TAREFAS NA PÁGINA INDEPENDENTE COM CAPTURA CORRETA DE MOUSE ---
     const listTodo = document.getElementById("list-todo");
     const listDoing = document.getElementById("list-doing");
     const listDone = document.getElementById("list-done");
     const pageAddTaskBtn = document.getElementById("page-add-task-btn");
-
     const taskModal = document.getElementById("task-modal");
     const btnCloseModal = document.getElementById("btn-close-modal");
     const btnSaveTask = document.getElementById("btn-save-task");
     const inputName = document.getElementById("modal-task-name");
+
+    let cardSendoArrastado = null;
+    let startX = 0;
+    let currentX = 0;
+    let isDragging = false;
 
     function renderizarTarefasPaginaIndependente() {
         if (!listTodo || !listDoing || !listDone) return;
@@ -145,8 +146,10 @@ document.addEventListener("DOMContentLoaded", () => {
         arrayTarefas.forEach((tarefa, index) => {
             const item = document.createElement("div");
             item.className = `task-item status-${tarefa.status}`;
+            item.setAttribute("data-id", index);
+            item.style.cursor = "grab";
             item.innerHTML = `
-                <div style="display:flex; flex-direction:column; gap:4px;">
+                <div style="display:flex; flex-direction:column; gap:4px; pointer-events:none;">
                     <span class="task-text">${tarefa.texto}</span>
                     <small style="color: #64748b; font-size:11px; font-weight:600; text-transform:uppercase;">${tarefa.disciplina || 'Geral'}</small>
                 </div>
@@ -164,13 +167,82 @@ document.addEventListener("DOMContentLoaded", () => {
                 renderizarTarefasPaginaIndependente();
             });
 
+            // Handlers para dispositivos móveis (Toque)
+            item.addEventListener("touchstart", (e) => {
+                startX = e.touches[0].clientX;
+                cardSendoArrastado = item;
+                item.style.transition = "none";
+            });
+
+            item.addEventListener("touchmove", (e) => {
+                if (cardSendoArrastado !== item) return;
+                currentX = e.touches[0].clientX - startX;
+                if (currentX < 0) {
+                    item.style.transform = `translateX(${currentX}px)`;
+                }
+            });
+
+            item.addEventListener("touchend", () => {
+                if (cardSendoArrastado !== item) return;
+                item.style.transition = "transform 0.3s ease";
+                if (currentX < -100) {
+                    item.style.transform = "translateX(-100%)";
+                    indiceParaDeletar = index;
+                    if (confirmModal) confirmModal.classList.add("open");
+                } else {
+                    item.style.transform = "translateX(0)";
+                }
+                cardSendoArrastado = null;
+                currentX = 0;
+            });
+
+            // Handlers para Desktop (Mouse de Computador)
+            item.addEventListener("mousedown", (e) => {
+                if (e.target.tagName === 'SELECT') return;
+                startX = e.clientX;
+                isDragging = true;
+                cardSendoArrastado = item;
+                item.style.transition = "none";
+                item.style.cursor = "grabbing";
+            });
+
             if (tarefa.status === "todo") listTodo.appendChild(item);
             else if (tarefa.status === "doing") listDoing.appendChild(item);
             else if (tarefa.status === "done") listDone.appendChild(item);
         });
     }
 
-    // CONTROLE DOS MENU SELECTS EXCLUSIVOS (SEM ALERTA PROMPT)
+    // Escutas globais na janela para o mouse não "escapar" do card
+    window.addEventListener("mousemove", (e) => {
+        if (!isDragging || !cardSendoArrastado) return;
+        currentX = e.clientX - startX;
+        if (currentX < 0) {
+            cardSendoArrastado.style.transform = `translateX(${currentX}px)`;
+            if (currentX < -80) cardSendoArrastado.style.opacity = "0.6";
+        }
+    });
+
+    window.addEventListener("mouseup", () => {
+        if (!isDragging || !cardSendoArrastado) return;
+        isDragging = false;
+        cardSendoArrastado.style.transition = "transform 0.3s ease, opacity 0.3s ease";
+        cardSendoArrastado.style.cursor = "grab";
+
+        const idx = parseInt(cardSendoArrastado.getAttribute("data-id"));
+
+        if (currentX < -80) { 
+            cardSendoArrastado.style.transform = "translateX(-100%)";
+            cardSendoArrastado.style.opacity = "0";
+            indiceParaDeletar = idx;
+            if (confirmModal) confirmModal.classList.add("open");
+        } else {
+            cardSendoArrastado.style.transform = "translateX(0)";
+            cardSendoArrastado.style.opacity = "1";
+        }
+        currentX = 0;
+    });
+
+    // --- ENTRADAS DO MODAL DE CRIAÇÃO ---
     document.querySelectorAll('.custom-select-trigger').forEach(trigger => {
         trigger.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -194,7 +266,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             trigger.innerText = option.innerText;
             trigger.setAttribute('data-value', option.getAttribute('data-value'));
-            
             wrapper.classList.remove('open');
         });
     });
@@ -221,86 +292,23 @@ document.addEventListener("DOMContentLoaded", () => {
             const nome = inputName.value.trim();
             const triggerDay = document.getElementById("day-trigger");
             const triggerSubject = document.getElementById("subject-trigger");
-            
             const dia = triggerDay ? triggerDay.getAttribute("data-value") : "1";
             const disciplina = triggerSubject ? triggerSubject.getAttribute("data-value") : "Geral";
 
             if (nome !== "") {
-                arrayTarefas.push({ 
-                    texto: nome, 
-                    status: "todo",
-                    dia: dia,
-                    disciplina: disciplina
-                });
+                arrayTarefas.push({ texto: nome, status: "todo", dia: dia, disciplina: disciplina });
                 salvarNoBanco();
                 renderizarTarefasPaginaIndependente();
                 if (taskModal) taskModal.classList.remove("open");
-            } else {
-                alert("Por favor, digite o nome da tarefa!");
             }
         });
     }
 
-    // Inicializa as renderizações corretas da tela ativa
-    renderizarTarefasDashboard();
-    renderizarTarefasPaginaIndependente();
-
-    // --- 6. MODAL DO CALENDÁRIO COMPLETO ---
-    const modal = document.getElementById("calendar-modal");
-    const btnOpen = document.getElementById("open-full-calendar");
-    const btnClose = document.getElementById("close-calendar");
-    const btnPrev = document.getElementById("prev-month");
-    const btnNext = document.getElementById("next-month");
-    
-    if(modal && btnOpen) {
-        const dataAtual = new Date();
-        let mesVisivel = dataAtual.getMonth();
-        let anoVisivel = dataAtual.getFullYear();
-        const mesesCompletos = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
-
-        function renderizarCalendarioModal(mes, ano) {
-            document.getElementById("modal-month-title").innerText = `${mesesCompletos[mes]} ${ano}`;
-            const grid = document.getElementById("modal-days-grid");
-            grid.innerHTML = "";
-
-            const primeiroDiaMês = new Date(ano, mes, 1).getDay();
-            const totalDiasMês = new Date(ano, mes + 1, 0).getDate();
-
-            for (let i = 0; i < primeiroDiaMês; i++) {
-                const divVazia = document.createElement("div");
-                divVazia.className = "modal-day empty";
-                grid.appendChild(divVazia);
-            }
-
-            for (let dia = 1; dia <= totalDiasMês; dia++) {
-                const divDia = document.createElement("div");
-                divDia.className = "modal-day";
-                divDia.innerText = dia;
-
-                if (dia === dataAtual.getDate() && mes === dataAtual.getMonth() && ano === dataAtual.getFullYear()) {
-                    divDia.classList.add("today");
-                }
-                grid.appendChild(divDia);
-            }
-        }
-
-        btnOpen.addEventListener("click", () => {
-            mesVisivel = dataAtual.getMonth();
-            anoVisivel = dataAtual.getFullYear();
-            renderizarCalendarioModal(mesVisivel, anoVisivel);
-            modal.classList.add("open");
-        });
-
-        if (btnClose) btnClose.addEventListener("click", () => modal.classList.remove("open"));
-        if (btnPrev) btnPrev.addEventListener("click", () => {
-            mesVisivel--;
-            if (mesVisivel < 0) { mesVisivel = 11; anoVisivel--; }
-            renderizarCalendarioModal(mesVisivel, anoVisivel);
-        });
-        if (btnNext) btnNext.addEventListener("click", () => {
-            mesVisivel++;
-            if (mesVisivel > 11) { mesVisivel = 0; anoVisivel++; }
-            renderizarCalendarioModal(mesVisivel, anoVisivel);
-        });
+    // Inicializa as renderizações apenas se as listas existirem na página atual
+    if (listContainerDashboard) {
+        renderizarTarefasDashboard();
+    }
+    if (listTodo || listDoing || listDone) {
+        renderizarTarefasPaginaIndependente();
     }
 });
