@@ -9,30 +9,38 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("meuCronogramaTarefas", JSON.stringify(arrayTarefas));
     }
 
-    // --- VARIÁVEIS PARA CONTROLE DE EXCLUSÃO ---
+    // --- VARIÁVEIS PARA CONTROLE DE EXCLUSÃO (BLINDADO) ---
     let indiceParaDeletar = null;
-    const confirmModal = document.getElementById("confirm-modal");
-    const btnCancelDelete = document.getElementById("btn-cancel-delete");
-    const btnConfirmDelete = document.getElementById("btn-confirm-delete");
 
-    if (btnCancelDelete && confirmModal) {
-        btnCancelDelete.addEventListener("click", () => {
-            confirmModal.classList.remove("open");
-            renderizarTarefasPaginaIndependente(); // Reseta o card
-        });
-    }
+    // Usamos uma função auxiliar para garantir que os botões funcionem mesmo se o HTML atualizar
+    function configurarBotoesExclusao() {
+        const modalDeAviso = document.getElementById("confirm-modal");
+        const botaoCancelar = document.getElementById("btn-cancel-delete");
+        const botaoConfirmar = document.getElementById("btn-confirm-delete");
 
-    if (btnConfirmDelete && confirmModal) {
-        btnConfirmDelete.addEventListener("click", () => {
-            if (indiceParaDeletar !== null) {
-                arrayTarefas.splice(indiceParaDeletar, 1);
-                salvarNoBanco();
-                renderizarTarefasPaginaIndependente();
-                renderizarTarefasDashboard();
-                confirmModal.classList.remove("open");
-                indiceParaDeletar = null;
-            }
-        });
+        if (botaoCancelar && modalDeAviso) {
+            // Remove evento antigo para não duplicar e adiciona o novo
+            botaoCancelar.onclick = () => {
+                modalDeAviso.classList.remove("open");
+                renderizarTarefasPaginaIndependente(); // Traz o card de volta se desistir
+            };
+        }
+
+        if (botaoConfirmar && modalDeAviso) {
+            botaoConfirmar.onclick = () => {
+                if (indiceParaDeletar !== null) {
+                    arrayTarefas.splice(indiceParaDeletar, 1);
+                    salvarNoBanco();
+                    
+                    // Fecha o modal e atualiza as duas telas
+                    modalDeAviso.classList.remove("open");
+                    renderizarTarefasPaginaIndependente();
+                    renderizarTarefasDashboard();
+                    
+                    indiceParaDeletar = null;
+                }
+            };
+        }
     }
 
     // --- 2. NAVEGAÇÃO ENTRE TELAS (CORRIGIDO) ---
@@ -49,8 +57,10 @@ document.addEventListener("DOMContentLoaded", () => {
     if (navHome) navHome.addEventListener("click", () => { window.location.href = "dashboard.html"; });
     if (navTasks) navTasks.addEventListener("click", () => { window.location.href = "tarefas.html"; });
 
-    // --- 3. LÓGICA DO CALENDÁRIO E CRONOGRAMA ---
+    // --- 3. LÓGICA DO CALENDÁRIO E CRONOGRAMA (BLINDADO) ---
     const dayNameDisplay = document.getElementById("current-day-name");
+    
+    // Só executa o calendário se estivermos na página que possui esses elementos (Dashboard)
     if (dayNameDisplay) {
         const dataAtual = new Date();
         const mesesAbrev = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
@@ -68,11 +78,37 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const numeroDiaHoje = dataAtual.getDay(); 
         dayNameDisplay.innerText = diasSemana[numeroDiaHoje];
+        
         const monthYearEl = document.getElementById("current-month-year");
-        if (monthYearEl) monthYearEl.innerText = `${mesesAbrev[dataAtual.getMonth()]} ${dataAtual.getFullYear()}`;
+        if (monthYearEl) {
+            monthYearEl.innerText = `${mesesAbrev[dataAtual.getMonth()]} ${dataAtual.getFullYear()}`;
+        }
 
         const subjectDisplay = document.getElementById("schedule-subject");
-        if (subjectDisplay) subjectDisplay.innerHTML = cronogramaEstudos[numeroDiaHoje];
+        if (subjectDisplay) {
+            subjectDisplay.innerHTML = cronogramaEstudos[numeroDiaHoje];
+        }
+
+        // --- SINCRONIZAÇÃO DOS NÚMEROS E DIAS DA SEMANA ---
+        const elementoHoje = document.querySelector(`.day[data-day="${numeroDiaHoje}"]`);
+        if (elementoHoje) {
+            elementoHoje.classList.add("active");
+        }
+
+        // Calcula dinamicamente as datas numéricas de cada quadradinho do mini-calendário
+        document.querySelectorAll('.day').forEach(diaDom => {
+            const alvoDiaSemana = parseInt(diaDom.getAttribute('data-day'));
+            if (!isNaN(alvoDiaSemana)) {
+                let diferenca = alvoDiaSemana - numeroDiaHoje;
+                const dataAlvo = new Date(dataAtual);
+                dataAlvo.setDate(dataAtual.getDate() + diferenca);
+                
+                const numDisplay = diaDom.querySelector('.num');
+                if (numDisplay) {
+                    numDisplay.innerText = dataAlvo.getDate();
+                }
+            }
+        });
     }
 
     // --- 4. RENDERIZAR TAREFAS NA DASHBOARD PRINCIPAL ---
@@ -148,6 +184,9 @@ document.addEventListener("DOMContentLoaded", () => {
             item.className = `task-item status-${tarefa.status}`;
             item.setAttribute("data-id", index);
             item.style.cursor = "grab";
+            item.style.transform = "translateX(0px)";
+            item.style.opacity = "1";
+            
             item.innerHTML = `
                 <div style="display:flex; flex-direction:column; gap:4px; pointer-events:none;">
                     <span class="task-text">${tarefa.texto}</span>
@@ -167,43 +206,96 @@ document.addEventListener("DOMContentLoaded", () => {
                 renderizarTarefasPaginaIndependente();
             });
 
-            // Handlers para dispositivos móveis (Toque)
+            // --- CONTROLE DE ARRASTAR ISOLADO POR CARD ---
+            let mouseXInicial = 0;
+            let deslocamentoX = 0;
+            let segurandoCard = false;
+
+            // Mover (computador)
+            const moverMouse = (e) => {
+                if (!segurandoCard) return;
+                deslocamentoX = e.clientX - mouseXInicial;
+                if (deslocamentoX < 0) {
+                    item.style.transform = `translateX(${deslocamentoX}px)`;
+                    if (deslocamentoX < -60) item.style.opacity = "0.6";
+                }
+            };
+
+            // Soltar (computador)
+            const soltarMouse = () => {
+                if (!segurandoCard) return;
+                segurandoCard = false;
+                item.style.transition = "transform 0.3s ease, opacity 0.3s ease";
+                item.style.cursor = "grab";
+
+                if (deslocamentoX < -80) {
+                    item.style.transform = "translateX(-100%)";
+                    item.style.opacity = "0";
+                    indiceParaDeletar = index;
+                    
+                    const modalDeAviso = document.getElementById("confirm-modal");
+if (modalDeAviso) {
+    configurarBotoesExclusao(); // Garante os cliques nos botões do aviso
+    modalDeAviso.classList.add("open");
+} else {
+    // Caso o HTML do modal suma por algum motivo, ele deleta via navegador para não travar!
+    const prosseguir = confirm("Deseja mesmo excluir esta tarefa?");
+    if (prosseguir) {
+        arrayTarefas.splice(index, 1);
+        salvarNoBanco();
+        renderizarTarefasPaginaIndependente();
+    } else {
+        item.style.transform = "translateX(0px)";
+        item.style.opacity = "1";
+    }
+}
+                } else {
+                    item.style.transform = "translateX(0px)";
+                    item.style.opacity = "1";
+                }
+
+                window.removeEventListener("mousemove", moverMouse);
+                window.removeEventListener("mouseup", soltarMouse);
+            };
+
+            // Clicar (computador)
+            item.addEventListener("mousedown", (e) => {
+                if (e.target.tagName === 'SELECT') return;
+                segurandoCard = true;
+                mouseXInicial = e.clientX;
+                deslocamentoX = 0;
+                item.style.transition = "none";
+                item.style.cursor = "grabbing";
+
+                window.addEventListener("mousemove", moverMouse);
+                window.addEventListener("mouseup", soltarMouse);
+            });
+
+            // --- EVENTOS PARA CELULAR (TOQUE) ---
             item.addEventListener("touchstart", (e) => {
-                startX = e.touches[0].clientX;
-                cardSendoArrastado = item;
+                mouseXInicial = e.touches[0].clientX;
+                deslocamentoX = 0;
                 item.style.transition = "none";
             });
 
             item.addEventListener("touchmove", (e) => {
-                if (cardSendoArrastado !== item) return;
-                currentX = e.touches[0].clientX - startX;
-                if (currentX < 0) {
-                    item.style.transform = `translateX(${currentX}px)`;
+                deslocamentoX = e.touches[0].clientX - mouseXInicial;
+                if (deslocamentoX < 0) {
+                    item.style.transform = `translateX(${deslocamentoX}px)`;
                 }
             });
 
             item.addEventListener("touchend", () => {
-                if (cardSendoArrastado !== item) return;
-                item.style.transition = "transform 0.3s ease";
-                if (currentX < -100) {
+                item.style.transition = "transform 0.3s ease, opacity 0.3s ease";
+                if (deslocamentoX < -80) {
                     item.style.transform = "translateX(-100%)";
+                    item.style.opacity = "0";
                     indiceParaDeletar = index;
                     if (confirmModal) confirmModal.classList.add("open");
                 } else {
-                    item.style.transform = "translateX(0)";
+                    item.style.transform = "translateX(0px)";
+                    item.style.opacity = "1";
                 }
-                cardSendoArrastado = null;
-                currentX = 0;
-            });
-
-            // Handlers para Desktop (Mouse de Computador)
-            item.addEventListener("mousedown", (e) => {
-                if (e.target.tagName === 'SELECT') return;
-                startX = e.clientX;
-                isDragging = true;
-                cardSendoArrastado = item;
-                item.style.transition = "none";
-                item.style.cursor = "grabbing";
             });
 
             if (tarefa.status === "todo") listTodo.appendChild(item);
@@ -312,3 +404,79 @@ document.addEventListener("DOMContentLoaded", () => {
         renderizarTarefasPaginaIndependente();
     }
 });
+// --- 6. MODAL DO CALENDÁRIO COMPLETO DO MÊS ---
+    const modalCalendario = document.getElementById("calendar-modal");
+    const btnOpenCalendario = document.getElementById("open-full-calendar");
+    const btnCloseCalendario = document.getElementById("close-calendar");
+    const btnPrevMes = document.getElementById("prev-month");
+    const btnNextMes = document.getElementById("next-month");
+    
+    if (modalCalendario && btnOpenCalendario) {
+        const dataAtual = new Date();
+        let mesVisivel = dataAtual.getMonth();
+        let anoVisivel = dataAtual.getFullYear();
+        const mesesCompletos = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+
+        function renderizarCalendarioModal(mes, ano) {
+            const tituloModal = document.getElementById("modal-month-title");
+            if (tituloModal) tituloModal.innerText = `${mesesCompletos[mes]} ${ano}`;
+            
+            const grid = document.getElementById("modal-days-grid");
+            if (!grid) return;
+            grid.innerHTML = "";
+
+            const primeiroDiaMes = new Date(ano, mes, 1).getDay();
+            const totalDiasMes = new Date(ano, mes + 1, 0).getDate();
+
+            // Preenche os espaços vazios do início do mês
+            for (let i = 0; i < primeiroDiaMes; i++) {
+                const divVazia = document.createElement("div");
+                divVazia.className = "modal-day empty";
+                grid.appendChild(divVazia);
+            }
+
+            // Preenche os dias numéricos do mês
+            for (let dia = 1; dia <= totalDiasMes; dia++) {
+                const divDia = document.createElement("div");
+                divDia.className = "modal-day";
+                divDia.innerText = dia;
+
+                // Destaca o dia de hoje real se for o mês/ano corretos
+                if (dia === dataAtual.getDate() && mes === dataAtual.getMonth() && ano === dataAtual.getFullYear()) {
+                    divDia.classList.add("today");
+                }
+                grid.appendChild(divDia);
+            }
+        }
+
+        // Abre o modal ao clicar no botão
+        btnOpenCalendario.addEventListener("click", () => {
+            mesVisivel = dataAtual.getMonth();
+            anoVisivel = dataAtual.getFullYear();
+            renderizarCalendarioModal(mesVisivel, anoVisivel);
+            modalCalendario.classList.add("open");
+        });
+
+        // Fecha o modal
+        if (btnCloseCalendario) {
+            btnCloseCalendario.addEventListener("click", () => modalCalendario.classList.remove("open"));
+        }
+
+        // Botão de mês anterior
+        if (btnPrevMes) {
+            btnPrevMes.addEventListener("click", () => {
+                mesVisivel--;
+                if (mesVisivel < 0) { mesVisivel = 11; anoVisivel--; }
+                renderizarCalendarioModal(mesVisivel, anoVisivel);
+            });
+        }
+
+        // Botão de próximo mês
+        if (btnNextMes) {
+            btnNextMes.addEventListener("click", () => {
+                mesVisivel++;
+                if (mesVisivel > 11) { mesVisivel = 0; anoVisivel++; }
+                renderizarCalendarioModal(mesVisivel, anoVisivel);
+            });
+        }
+    }
