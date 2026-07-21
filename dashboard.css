@@ -21,7 +21,9 @@ body {
     position: relative;
     width: 100%;
     max-width: 410px;
-    height: 100%;
+    /* Usa a altura inteira da tela visível no celular sem estourar */
+    height: 100vh;
+    height: 100dvh; /* dvh considera dinamicamente a barra do navegador do celular */
     max-height: 820px;
     border-radius: 30px;
     box-shadow: 0 20px 40px rgba(0,0,0,0.6);
@@ -29,7 +31,7 @@ body {
     background-color: #0b0314;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: space-between;
 }
 
 /* CONTEÚDO ROLÁVEL (A ROLAGEM ACONTECE APENAS AQUI DENTRO) */
@@ -154,12 +156,12 @@ body {
 /* 7. NAVEGAÇÃO INFERIOR MODERNA */
 /* --- NAVEGAÇÃO INFERIOR PROPORCIONAL AO APP --- */
 .bottom-nav {
-    position: absolute; /* Prende o menu dentro do .app-screen */
+    position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
     height: 65px;
-    background: rgba(19, 9, 36, 0.95) !important;
+    background: rgba(19, 9, 36, 0.98) !important;
     backdrop-filter: blur(12px);
     border-top: 1px solid rgba(124, 58, 237, 0.2);
     display: flex;
@@ -168,8 +170,8 @@ body {
     z-index: 999;
     padding: 0 10px;
     box-sizing: border-box;
-    border-bottom-left-radius: 30px; /* Acompanha a curva do aplicativo */
-    border-bottom-right-radius: 30px;
+    /* Adiciona um pequeno espaço interno na parte de baixo para celulares com barra de navegação virtual */
+    padding-bottom: max(0px, env(safe-area-inset-bottom)); 
 }
 
 /* Botões da navegação */
