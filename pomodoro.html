@@ -17,10 +17,21 @@
             <div style="width: 40px;"></div>
         </header>
 
-        <main class="dashboard-content" style="text-align: center;">
+        <main class="dashboard-content">
             <div class="modes-container">
-                <button class="mode-btn active">Pomodoro</button>
-                <button class="mode-btn">Pausa</button>
+                <button class="mode-btn active" id="btn-mode-pomodoro">Pomodoro</button>
+                <button class="mode-btn" id="btn-mode-pausa">Pausa</button>
+            </div>
+
+            <div class="time-options" id="time-options">
+                <button class="time-btn active" data-time="25">25m</button>
+                <button class="time-btn" data-time="30">30m</button>
+                <button class="time-btn" data-time="45">45m</button>
+                <button class="time-btn" data-time="60">60m</button>
+                <div class="custom-time-input">
+                    <input type="number" id="custom-min" placeholder="Min" min="1" max="180">
+                    <button id="btn-set-custom">OK</button>
+                </div>
             </div>
 
             <div class="timer-display">

@@ -119,3 +119,60 @@
     color: #fff;
     box-shadow: 0 0 10px rgba(124, 58, 237, 0.3);
 }
+/* --- OPÇÕES DE TEMPO E CUSTOMIZAÇÃO --- */
+.time-options {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+}
+
+.time-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(124, 58, 237, 0.3);
+    color: #a78bfa;
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.time-btn.active {
+    background: #7c3aed;
+    color: #fff;
+    border-color: #7c3aed;
+    font-weight: bold;
+}
+
+.custom-time-input {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(124, 58, 237, 0.3);
+    border-radius: 12px;
+    padding: 2px 6px;
+}
+
+.custom-time-input input {
+    width: 45px;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 12px;
+    text-align: center;
+    outline: none;
+}
+
+.custom-time-input button {
+    background: rgba(124, 58, 237, 0.4);
+    border: none;
+    color: #fff;
+    border-radius: 8px;
+    padding: 4px 8px;
+    font-size: 11px;
+    cursor: pointer;
+}

@@ -1,97 +1,152 @@
 // ==========================================
-// LÓGICA DO POMODORO TIMER (CORRIGIDA)
+// LÓGICA DO POMODORO COM TEMPOS CUSTOMIZADOS
 // ==========================================
 
-let timeLeft = 25 * 60; // 25 minutos em segundos (1500 segundos)
+let focusDuration = 25 * 60; // Duração customizável de foco (padrão: 25 min)
+let breakDuration = 5 * 60;  // Duração de pausa (padrão: 5 min)
+let timeLeft = focusDuration;
 let timerId = null;
+let currentMode = 'pomodoro'; // 'pomodoro' ou 'pausa'
 
 document.addEventListener("DOMContentLoaded", () => {
     const display = document.getElementById('timer');
     const btnStartPause = document.getElementById('start-pause');
     const btnReset = document.getElementById('reset');
     const statusLabel = document.getElementById('status-label');
-    const modeButtons = document.querySelectorAll('.mode-btn');
+    const btnPomodoro = document.getElementById('btn-mode-pomodoro');
+    const btnPausa = document.getElementById('btn-mode-pausa');
+    const timeButtons = document.querySelectorAll('.time-btn');
+    const customInput = document.getElementById('custom-min');
+    const btnSetCustom = document.getElementById('btn-set-custom');
+    const timeOptionsContainer = document.getElementById('time-options');
 
-    // Função que formata o tempo atual e atualiza na tela
+    // Atualiza os números no visor no formato 00:00
     function updateDisplay() {
         let minutes = Math.floor(timeLeft / 60);
         let seconds = timeLeft % 60;
-        
-        // Garante que fique no formato 00:00
         if (display) {
             display.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
         }
     }
 
-    // Função para iniciar a contagem regressiva
+    // Alterna o modo (Foco vs Pausa)
+    function setMode(mode) {
+        currentMode = mode;
+        pauseTimer();
+
+        if (mode === 'pomodoro') {
+            if (btnPomodoro) btnPomodoro.classList.add('active');
+            if (btnPausa) btnPausa.classList.remove('active');
+            timeLeft = focusDuration;
+            if (statusLabel) statusLabel.textContent = "Hora de focar";
+            if (timeOptionsContainer) timeOptionsContainer.style.display = 'flex';
+        } else {
+            if (btnPausa) btnPausa.classList.add('active');
+            if (btnPomodoro) btnPomodoro.classList.remove('active');
+            timeLeft = breakDuration;
+            if (statusLabel) statusLabel.textContent = "Pausa curta";
+            if (timeOptionsContainer) timeOptionsContainer.style.display = 'none'; // Esconde opções de tempo durante a pausa
+        }
+
+        updateDisplay();
+    }
+
+    // Define nova duração para o modo foco em minutos
+    function setDuration(minutes) {
+        focusDuration = minutes * 60;
+        if (currentMode === 'pomodoro') {
+            pauseTimer();
+            timeLeft = focusDuration;
+            updateDisplay();
+        }
+    }
+
+    // Ação acionada ao zerar o tempo (Ciclo Automático)
+    function handleCycleEnd() {
+        clearInterval(timerId);
+        timerId = null;
+
+        if (currentMode === 'pomodoro') {
+            alert("Sessão de foco terminada! Iniciando pausa...");
+            setMode('pausa');
+        } else {
+            alert("Pausa terminada! Volte ao foco!");
+            setMode('pomodoro');
+        }
+
+        startTimer(); // Reinicia o cronômetro para o próximo ciclo
+    }
+
+    // Inicia a contagem regressiva
     function startTimer() {
         if (timerId !== null) return;
 
-        btnStartPause.innerHTML = '<i class="material-icons">pause</i>';
-        
+        if (btnStartPause) {
+            btnStartPause.innerHTML = '<i class="material-icons">pause</i>';
+        }
+
         timerId = setInterval(() => {
             if (timeLeft > 0) {
-                timeLeft--; // Diminui 1 segundo
-                updateDisplay(); // Atualiza a tela com o novo tempo
+                timeLeft--;
+                updateDisplay();
             } else {
-                // Chegou a zero
-                clearInterval(timerId);
-                timerId = null;
-                btnStartPause.innerHTML = '<i class="material-icons">play_arrow</i>';
-                alert('Tempo finalizado!');
+                handleCycleEnd();
             }
         }, 1000);
     }
 
-    // Função para pausar a contagem
+    // Pausa a contagem regressiva
     function pauseTimer() {
         clearInterval(timerId);
         timerId = null;
-        btnStartPause.innerHTML = '<i class="material-icons">play_arrow</i>';
+        if (btnStartPause) {
+            btnStartPause.innerHTML = '<i class="material-icons">play_arrow</i>';
+        }
     }
 
-    // Botão de Play / Pause
+    // Eventos Play / Pause
     if (btnStartPause) {
         btnStartPause.addEventListener('click', () => {
-            if (timerId === null) {
-                startTimer();
-            } else {
-                pauseTimer();
-            }
+            if (timerId === null) startTimer();
+            else pauseTimer();
         });
     }
 
-    // Botão de Reset
+    // Evento Reset
     if (btnReset) {
         btnReset.addEventListener('click', () => {
             pauseTimer();
-            // Verifica qual modo está ativo para resetar para o tempo correto
-            const isPausa = modeButtons[1] && modeButtons[1].classList.contains('active');
-            timeLeft = isPausa ? 5 * 60 : 25 * 60;
+            timeLeft = (currentMode === 'pomodoro') ? focusDuration : breakDuration;
             updateDisplay();
         });
     }
 
-    // Alternar entre Pomodoro (25m) e Pausa (5m)
-    modeButtons.forEach((button, index) => {
-        button.addEventListener('click', () => {
-            modeButtons.forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
+    // Botões de Troca de Modo
+    if (btnPomodoro) btnPomodoro.addEventListener('click', () => setMode('pomodoro'));
+    if (btnPausa) btnPausa.addEventListener('click', () => setMode('pausa'));
 
-            pauseTimer();
-
-            if (index === 0) {
-                timeLeft = 25 * 60; // 25 Minutos
-                if (statusLabel) statusLabel.textContent = "Hora de focar";
-            } else {
-                timeLeft = 5 * 60; // 5 Minutos
-                if (statusLabel) statusLabel.textContent = "Pausa curta";
-            }
-
-            updateDisplay();
+    // Botões de tempo pré-definido (25m, 30m, 45m, 60m)
+    timeButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            timeButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const min = parseInt(btn.getAttribute('data-time'));
+            setDuration(min);
         });
     });
 
-    // Exibe o tempo inicial na tela assim que carrega a página
+    // Botão de tempo customizado (Digitado no input)
+    if (btnSetCustom && customInput) {
+        btnSetCustom.addEventListener('click', () => {
+            const min = parseInt(customInput.value);
+            if (min && min > 0) {
+                timeButtons.forEach(b => b.classList.remove('active'));
+                setDuration(min);
+                customInput.value = '';
+            }
+        });
+    }
+
+    // Exibição inicial
     updateDisplay();
 });
