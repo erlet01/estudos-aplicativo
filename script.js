@@ -65,7 +65,7 @@ if (navStudies) {
             4: "Carreira e Futuro;<br>Projeto Integrador: Carreira e Futuro",
             5: "Cultura; Atividade Extensionista 1",
             6: "Anotar no Fichário; Realizar Atividades",
-            0: "Descanso 🏖️"
+            0: "Descanso"
         };
 
         const numeroDiaHoje = dataAtual.getDay(); 
@@ -497,4 +497,103 @@ if (btnSaveTask) {
             });
         }
     }
+    // --- NAVEGAÇÃO E GERENCIAMENTO DO CALENDÁRIO COMPARTILHADO ---
+
+// 1. Redirecionamento exclusivo pelo Card na Área de Estudos
+const btnGranFaculdade = document.getElementById("btn-gran-faculdade");
+if (btnGranFaculdade) {
+    btnGranFaculdade.addEventListener("click", () => {
+        window.location.href = "gran-faculdade.html";
+    });
+}
+
+// Botão de voltar (na página Gran Faculdade)
+const btnBack = document.getElementById("btn-back");
+if (btnBack) {
+    btnBack.addEventListener("click", () => {
+        window.location.href = "estudos.html";
+    });
+}
+
+// 2. Função para salvar e carregar compromissos do LocalStorage
+function getEvents() {
+    return JSON.parse(localStorage.getItem("shared_calendar_events") || "{}");
+}
+
+function saveEvent(dateStr, title) {
+    const events = getEvents();
+    if (!events[dateStr]) events[dateStr] = [];
+    events[dateStr].push(title);
+    localStorage.setItem("shared_calendar_events", JSON.stringify(events));
+}
+
+// 3. Lógica do Modal de Compromissos (Somente na página Gran Faculdade)
+let dateToSave = null;
+const modalEvent = document.getElementById("modal-event");
+const selectedDateText = document.getElementById("selected-date-text");
+const eventTitleInput = document.getElementById("event-title-input");
+const btnSaveEvent = document.getElementById("btn-save-event");
+const btnCancelEvent = document.getElementById("btn-cancel-event");
+
+function openAddEventModal(dateStr) {
+    if (!modalEvent) return; // Se não estiver na página de edição, ignora
+    dateToSave = dateStr;
+    selectedDateText.textContent = `Data selecionada: ${dateStr}`;
+    eventTitleInput.value = "";
+    modalEvent.style.display = "flex";
+}
+
+if (btnCancelEvent) {
+    btnCancelEvent.addEventListener("click", () => {
+        modalEvent.style.display = "none";
+    });
+}
+
+if (btnSaveEvent) {
+    btnSaveEvent.addEventListener("click", () => {
+        const title = eventTitleInput.value.trim();
+        if (title && dateToSave) {
+            saveEvent(dateToSave, title);
+            modalEvent.style.display = "none";
+            renderCalendar(); // Atualiza a exibição dos dias
+        }
+    });
+}
+
+// 4. Renderização do Calendário (Funciona tanto na Dashboard quanto na Gran Faculdade)
+function renderCalendar() {
+    const calendarDays = document.getElementById("calendar-days");
+    if (!calendarDays) return;
+
+    const isEditablePage = window.location.pathname.includes("gran-faculdade.html");
+    const events = getEvents();
+
+    calendarDays.innerHTML = "";
+    
+    // Exemplo de renderização simplificada dos dias (Ajuste conforme a lógica de datas que já usa)
+    for (let day = 1; day <= 31; day++) {
+        const dateKey = `2026-07-${day < 10 ? '0' + day : day}`;
+        const dayEl = document.createElement("div");
+        dayEl.className = "calendar-day";
+        dayEl.innerHTML = `<span>${day}</span>`;
+
+        // Se houver compromisso marcado no dia, insere a bolinha indicadora
+        if (events[dateKey] && events[dateKey].length > 0) {
+            dayEl.classList.add("has-event");
+        }
+
+        // Clique para adicionar compromisso (APENAS se estiver na página da Gran Faculdade)
+        if (isEditablePage) {
+            dayEl.style.cursor = "pointer";
+            dayEl.addEventListener("click", () => openAddEventModal(dateKey));
+        } else {
+            dayEl.style.cursor = "default"; // Na Dashboard fica apenas como visualização
+        }
+
+        calendarDays.appendChild(dayEl);
+    }
+}
+
+// Executa ao carregar a página
+document.addEventListener("DOMContentLoaded", renderCalendar);
 });

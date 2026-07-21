@@ -1,0 +1,235 @@
+/* ==========================================
+   ESTILOS - PÁGINA GRAN FACULDADE
+   ========================================== */
+
+/* Botão de Voltar */
+#btn-back {
+    color: #a78bfa;
+    transition: transform 0.2s;
+}
+#btn-back:active {
+    transform: scale(0.9);
+}
+
+/* --- CALENDÁRIO --- */
+.calendar-container {
+    background: rgba(30, 15, 55, 0.5);
+    border: 1px solid rgba(124, 58, 237, 0.2);
+    border-radius: 20px;
+    padding: 15px;
+    margin-top: 20px;
+    backdrop-filter: blur(10px);
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 0 5px;
+}
+
+.calendar-header h3 {
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.calendar-header button {
+    background: rgba(124, 58, 237, 0.2);
+    border: none;
+    color: #a78bfa;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.calendar-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    color: #64748b;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+}
+
+.calendar-day {
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #cbd5e1;
+    font-size: 14px;
+    border-radius: 10px;
+    position: relative;
+    transition: background 0.2s;
+}
+
+/* Estilo do dia com compromisso */
+.calendar-day.has-event::after {
+    content: '';
+    width: 5px;
+    height: 5px;
+    background: #7c3aed;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 5px;
+    box-shadow: 0 0 8px #7c3aed;
+}
+
+.calendar-day:active {
+    background: rgba(124, 58, 237, 0.3);
+}
+
+/* --- MODAL DE COMPROMISSOS --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
+
+.modal-box {
+    background: #130924;
+    width: 85%;
+    max-width: 320px;
+    padding: 25px;
+    border-radius: 24px;
+    border: 1px solid rgba(124, 58, 237, 0.4);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+}
+
+.modal-box h3 {
+    color: #fff;
+    margin-bottom: 5px;
+    font-size: 20px;
+}
+
+.modal-box input {
+    width: 100%;
+    background: #1a0b2e;
+    border: 1px solid rgba(124, 58, 237, 0.5);
+    padding: 12px;
+    border-radius: 12px;
+    color: #fff;
+    margin-top: 15px;
+    margin-bottom: 20px;
+    outline: none;
+}
+
+.modal-box input:focus {
+    border-color: #a78bfa;
+    box-shadow: 0 0 10px rgba(167, 139, 250, 0.2);
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.btn-cancel {
+    background: transparent;
+    color: #94a3b8;
+    border: none;
+    padding: 10px;
+    font-weight: 600;
+}
+
+.btn-save {
+    background: #7c3aed;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-weight: 700;
+    box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+}
+/* --- CABEÇALHO DA PÁGINA GRAN FACULDADE --- */
+.app-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 10px 10px 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.app-header h2 {
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* BOTÃO DA SETA DE VOLTAR */
+.icon-btn {
+    background: transparent;
+    border: none;
+    color: #a78bfa; /* Cor lilás de destaque */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background 0.2s, transform 0.2s;
+}
+
+/* Efeito ao clicar na seta */
+.icon-btn:active {
+    background: rgba(124, 58, 237, 0.2);
+    transform: scale(0.9);
+}
+
+.icon-btn .material-icons {
+    font-size: 24px;
+}
+/* --- CARD DE TÍTULO DESTAQUE (MAIS ESTREITO E MAIS ALTO) --- */
+.faculty-card {
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.4), rgba(19, 9, 36, 0.95));
+    border: 1px solid rgba(167, 139, 250, 0.5);
+    border-radius: 16px;
+    padding: 12px 16px;              /* Espaçamento bem compacto */
+    margin: 5px auto 15px auto;      /* Reduz a margem superior para subir o card */
+    text-align: center;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5), 0 0 20px rgba(124, 58, 237, 0.3); /* Destaque luminoso */
+    backdrop-filter: blur(12px);
+    width: 80%;
+    max-width: 280px;                 /* Fica bem mais estreito */
+}
+
+/* Nome da Faculdade em Destaque */
+.faculty-name {
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: 800;
+    margin: 0 0 2px 0;
+    letter-spacing: 0.5px;
+}
+
+/* Curso */
+.faculty-course {
+    color: #cbd5e1;
+    font-size: 12.5px;
+    font-weight: 500;
+    margin: 0;
+    text-transform: none;             /* Mantém o 'e' minúsculo */
+}
