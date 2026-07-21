@@ -162,6 +162,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const inputName = document.getElementById("modal-task-name");
 
     // --- 5. RENDERIZAR TAREFAS POR COLUNA NA PÁGINA INDEPENDENTE ---
+// --- 5. RENDERIZAR TAREFAS POR COLUNA NA PÁGINA INDEPENDENTE ---
 function renderizarTarefasPaginaIndependente() {
     if (!listTodo || !listDoing || !listDone) return;
 
@@ -169,9 +170,16 @@ function renderizarTarefasPaginaIndependente() {
     listDoing.innerHTML = "";
     listDone.innerHTML = "";
 
+    const rotulos = {
+        todo: "Aguardando",
+        doing: "Em preparo",
+        done: "Concluído"
+    };
+
     arrayTarefas.forEach((tarefa, index) => {
         const item = document.createElement("div");
         item.className = `task-item status-${tarefa.status}`;
+        
         item.innerHTML = `
             <div class="task-info">
                 <span class="task-text">${tarefa.texto}</span>
@@ -179,30 +187,57 @@ function renderizarTarefasPaginaIndependente() {
             </div>
             
             <div class="task-actions">
-                <select class="status-select" data-index="${index}">
-                    <option value="todo" ${tarefa.status === 'todo' ? 'selected' : ''}>Aguardando</option>
-                    <option value="doing" ${tarefa.status === 'doing' ? 'selected' : ''}>Em preparo</option>
-                    <option value="done" ${tarefa.status === 'done' ? 'selected' : ''}>Concluído</option>
-                </select>
+                <div class="custom-select-wrapper task-status-wrapper">
+                    <button type="button" class="custom-select-trigger status-badge badge-${tarefa.status}">
+                        <span>${rotulos[tarefa.status]}</span>
+                    </button>
+                    <div class="custom-options">
+                        <div class="custom-option ${tarefa.status === 'todo' ? 'selected' : ''}" data-value="todo">
+                            <span class="dot todo"></span> Aguardando
+                        </div>
+                        <div class="custom-option ${tarefa.status === 'doing' ? 'selected' : ''}" data-value="doing">
+                            <span class="dot doing"></span> Em preparo
+                        </div>
+                        <div class="custom-option ${tarefa.status === 'done' ? 'selected' : ''}" data-value="done">
+                            <span class="dot done"></span> Concluído
+                        </div>
+                    </div>
+                </div>
+
                 <button class="btn-trash-delete" data-index="${index}" title="Excluir tarefa">
                     <i class="material-icons">delete</i>
                 </button>
             </div>
         `;
 
-        item.querySelector(".status-select").addEventListener("change", (e) => {
-            const idx = e.target.getAttribute("data-index");
-            arrayTarefas[idx].status = e.target.value;
-            salvarNoBanco();
-            renderizarTarefasPaginaIndependente();
+        // Controle do clique para abrir/fechar este menu do card
+        const wrapper = item.querySelector('.task-status-wrapper');
+        const trigger = item.querySelector('.custom-select-trigger');
+        const options = item.querySelectorAll('.custom-option');
+
+        trigger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            document.querySelectorAll('.custom-select-wrapper').forEach(w => {
+                if (w !== wrapper) w.classList.remove('open');
+            });
+            wrapper.classList.toggle('open');
         });
 
+        options.forEach(opt => {
+            opt.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const novoStatus = opt.getAttribute('data-value');
+                arrayTarefas[index].status = novoStatus;
+                salvarNoBanco();
+                renderizarTarefasPaginaIndependente();
+            });
+        });
+
+        // Botão de lixeira
         item.querySelector(".btn-trash-delete").addEventListener("click", (e) => {
             e.stopPropagation();
             indiceParaDeletar = index;
-            if (confirmModal) {
-                confirmModal.classList.add("open");
-            }
+            if (confirmModal) confirmModal.classList.add("open");
         });
 
         if (tarefa.status === "todo") listTodo.appendChild(item);

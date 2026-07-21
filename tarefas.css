@@ -489,3 +489,96 @@
 
 .btn-keep { background: rgba(255, 255, 255, 0.05); color: #cbd5e1; }
 .btn-delete { background: #ef4444; color: white; }
+
+/* --- MENU DE STATUS CUSTOMIZADO ULTRA MODERNO --- */
+.task-status-wrapper {
+    position: relative;
+    width: 135px;
+}
+
+/* Botão principal do Status (Badge) */
+.status-badge {
+    background: rgba(26, 15, 46, 0.85) !important;
+    border: 1px solid rgba(124, 58, 237, 0.35) !important;
+    border-radius: 12px !important;
+    padding: 8px 14px !important;
+    color: #f1f5f9 !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.status-badge:hover {
+    border-color: #a78bfa !important;
+    box-shadow: 0 0 12px rgba(124, 58, 237, 0.4);
+    transform: translateY(-1px);
+}
+
+/* CAIXINHA DE OPÇÕES (DROPDOWN MODERNO) */
+.task-status-wrapper .custom-options {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 150px;
+    background: rgba(19, 9, 36, 0.95);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(167, 139, 250, 0.3);
+    border-radius: 16px;
+    padding: 6px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7), 0 0 20px rgba(124, 58, 237, 0.15);
+    z-index: 100;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px) scale(0.95);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Animação suave ao abrir */
+.task-status-wrapper.open .custom-options {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+/* Cada opção dentro da caixinha */
+.task-status-wrapper .custom-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    color: #cbd5e1;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.task-status-wrapper .custom-option:hover {
+    background: rgba(124, 58, 237, 0.25);
+    color: #ffffff;
+    padding-left: 15px; /* Efeito deslizar suave */
+}
+
+/* Opção selecionada */
+.task-status-wrapper .custom-option.selected {
+    background: rgba(124, 58, 237, 0.4);
+    color: #ffffff;
+}
+
+/* Pontinhos coloridos para indicar o status */
+.task-status-wrapper .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    display: inline-block;
+}
+.task-status-wrapper .dot.todo { background: #94a3b8; box-shadow: 0 0 6px #94a3b8; }
+.task-status-wrapper .dot.doing { background: #a78bfa; box-shadow: 0 0 6px #a78bfa; }
+.task-status-wrapper .dot.done { background: #22c55e; box-shadow: 0 0 6px #22c55e; }
