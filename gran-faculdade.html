@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -5,53 +7,64 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="dashboard.css">
     <link rel="stylesheet" href="estudos.css">
-    <link rel="stylesheet" href="gran.css"> </head>
+    <link rel="stylesheet" href="gran.css">
+</head>
 <body>
     <div class="app-screen">
         <header class="app-header">
-            <button id="btn-back" class="icon-btn"><i class="material-icons">arrow_back</i></button>
-            <h2></h2>
-            <div style="width: 24px;"></div>
-        </header>
+            <button id="btn-back" class="icon-btn">
+                <i class="material-icons">arrow_back</i>
+            </button>
+            <h2>Gran Faculdade</h2>
+            <div style="width: 40px;"></div> </header>
 
         <main class="dashboard-content">
             <div class="faculty-card">
-    <h1 class="faculty-name">Gran Faculdade</h1>
-    <p class="faculty-course">Análise e Desenvolvimento de Sistemas</p>
-</div>
+                <h1 class="faculty-name">Gran Faculdade</h1>
+                <p class="faculty-course">Análise e Desenvolvimento de Sistemas</p>
+            </div>
 
             <div class="calendar-container">
                 <div class="calendar-header">
-                    <button id="prev-month"> &lt; </button>
+                    <button id="prev-month" class="month-btn"><i class="material-icons">chevron_left</i></button>
                     <h3 id="calendar-month-year">Julho 2026</h3>
-                    <button id="next-month"> &gt; </button>
+                    <button id="next-month" class="month-btn"><i class="material-icons">chevron_right</i></button>
                 </div>
                 <div class="calendar-weekdays">
                     <span>Dom</span><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span>
                 </div>
-                <div class="calendar-days" id="calendar-days"></div>
+                <div class="calendar-days" id="calendar-days">
+                    </div>
+            </div>
+
+            <div class="events-panel">
+                <div class="panel-header">
+                    <h4 id="selected-date-title">Selecione um dia</h4>
+                </div>
+                
+                <div class="event-form" id="event-form" style="display: none;">
+                    <input type="text" id="event-input" placeholder="Novo compromisso (ex: Prova de ADS)">
+                    <button id="btn-add-event"><i class="material-icons">add</i></button>
+                </div>
+
+                <ul class="events-list" id="events-list">
+                    <li class="empty-msg">Clique em um dia do mês acima para ver ou criar compromissos.</li>
+                </ul>
             </div>
         </main>
 
         <nav class="bottom-nav">
-            <button class="nav-item" id="nav-home"><i class="material-icons">home</i><span>Início</span></button>
-            <button class="nav-item active" id="nav-studies"><i class="material-icons">school</i><span>Estudos</span></button>
+            <button class="nav-item" id="nav-home">
+                <i class="material-icons">home</i>
+                <span>Início</span>
+            </button>
+            <button class="nav-item active" id="nav-studies">
+                <i class="material-icons">school</i>
+                <span>Estudos</span>
+            </button>
         </nav>
-    </div>
-
-    <div id="modal-event" class="modal-overlay" style="display: none;">
-        <div class="modal-box">
-            <h3>Novo Evento</h3>
-            <p id="selected-date-text" style="color: #a78bfa; font-size: 12px;"></p>
-            
-            <input type="text" id="event-title-input" placeholder="O que tem para hoje?">
-            
-            <div class="modal-buttons">
-                <button id="btn-cancel-event" class="btn-cancel">Voltar</button>
-                <button id="btn-save-event" class="btn-save">Agendar</button>
-            </div>
-        </div>
     </div>
 
     <script src="script.js"></script>
 </body>
+</html>

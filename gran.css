@@ -233,3 +233,106 @@
     margin: 0;
     text-transform: none;             /* Mantém o 'e' minúsculo */
 }
+/* --- NAVEGAÇÃO DE MESES DO CALENDÁRIO --- */
+.month-btn {
+    background: rgba(124, 58, 237, 0.25);
+    border: 1px solid rgba(167, 139, 250, 0.3);
+    color: #a78bfa;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.month-btn:active {
+    background: rgba(124, 58, 237, 0.5);
+}
+
+.calendar-day.selected {
+    background: #7c3aed !important;
+    color: #fff !important;
+    font-weight: bold;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(124, 58, 237, 0.6);
+}
+
+/* --- PAINEL / TABELINHA DE COMPROMISSOS --- */
+.events-panel {
+    background: rgba(19, 9, 36, 0.95);
+    border: 1px solid rgba(124, 58, 237, 0.3);
+    border-radius: 18px;
+    padding: 16px;
+    margin-top: 15px;
+    margin-bottom: 20px;
+}
+
+.panel-header h4 {
+    color: #a78bfa;
+    font-size: 14px;
+    margin: 0 0 12px 0;
+}
+
+.event-form {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.event-form input {
+    flex: 1;
+    background: #1a0b2e;
+    border: 1px solid rgba(124, 58, 237, 0.4);
+    border-radius: 10px;
+    padding: 10px 12px;
+    color: #fff;
+    font-size: 13px;
+    outline: none;
+}
+
+.event-form input:focus {
+    border-color: #a78bfa;
+}
+
+.event-form button {
+    background: #7c3aed;
+    border: none;
+    color: #fff;
+    width: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.events-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.events-list li {
+    background: rgba(124, 58, 237, 0.15);
+    border-left: 3px solid #7c3aed;
+    color: #f1f5f9;
+    font-size: 13px;
+    padding: 10px 12px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.events-list .empty-msg {
+    background: transparent;
+    border: none;
+    color: #64748b;
+    font-size: 12px;
+    text-align: center;
+    display: block;
+}
