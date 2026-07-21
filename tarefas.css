@@ -582,3 +582,39 @@
 .task-status-wrapper .dot.todo { background: #94a3b8; box-shadow: 0 0 6px #94a3b8; }
 .task-status-wrapper .dot.doing { background: #a78bfa; box-shadow: 0 0 6px #a78bfa; }
 .task-status-wrapper .dot.done { background: #22c55e; box-shadow: 0 0 6px #22c55e; }
+/* --- AVISO EM FORMATO RETANGULAR COMPACTO --- */
+#alert-modal .confirm-modal-content {
+    max-width: 300px !important;    /* Largura menor */
+    padding: 18px 20px !important;   /* Menos espaço interno (mais retangular) */
+    border-radius: 16px !important;  /* Bordas menos arredondadas */
+}
+
+/* Ícone menor e mais discreto */
+#alert-modal .confirm-icon {
+    width: 44px !important;
+    height: 44px !important;
+    margin-bottom: 10px !important;
+}
+
+#alert-modal .confirm-icon i {
+    font-size: 24px !important;
+}
+
+/* Título e Texto mais compactos */
+#alert-modal h3 {
+    font-size: 16px !important;
+    margin-bottom: 6px !important;
+}
+
+#alert-modal p {
+    font-size: 13px !important;
+    margin-bottom: 16px !important;
+    line-height: 1.4 !important;
+}
+
+/* Botão mais fino */
+#alert-modal .btn-delete {
+    padding: 9px 16px !important;
+    font-size: 13px !important;
+    border-radius: 10px !important;
+}

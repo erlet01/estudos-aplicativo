@@ -292,30 +292,44 @@ function renderizarTarefasPaginaIndependente() {
         });
     }
 
-    if (btnSaveTask) {
-        btnSaveTask.addEventListener("click", () => {
-            const nome = inputName.value.trim();
-            const triggerDay = document.getElementById("day-trigger");
-            const triggerSubject = document.getElementById("subject-trigger");
-            
-            const dia = triggerDay ? triggerDay.getAttribute("data-value") : "1";
-            const disciplina = triggerSubject ? triggerSubject.getAttribute("data-value") : "Geral";
+    // --- LÓGICA DO MODAL DE ALERTA DE CAMPO VAZIO ---
+const alertModal = document.getElementById("alert-modal");
+const btnOkAlert = document.getElementById("btn-ok-alert");
 
-            if (nome !== "") {
-                arrayTarefas.push({ 
-                    texto: nome, 
-                    status: "todo",
-                    dia: dia,
-                    disciplina: disciplina
-                });
-                salvarNoBanco();
-                renderizarTarefasPaginaIndependente();
-                if (taskModal) taskModal.classList.remove("open");
-            } else {
-                alert("Por favor, digite o nome da tarefa!");
+if (btnOkAlert && alertModal) {
+    btnOkAlert.addEventListener("click", () => {
+        alertModal.classList.remove("open");
+    });
+}
+
+// --- SALVAR NOVA TAREFA ---
+if (btnSaveTask) {
+    btnSaveTask.addEventListener("click", () => {
+        const nome = inputName.value.trim();
+        const triggerDay = document.getElementById("day-trigger");
+        const triggerSubject = document.getElementById("subject-trigger");
+        
+        const dia = triggerDay ? triggerDay.getAttribute("data-value") : "1";
+        const disciplina = triggerSubject ? triggerSubject.getAttribute("data-value") : "Geral";
+
+        if (nome !== "") {
+            arrayTarefas.push({ 
+                texto: nome, 
+                status: "todo",
+                dia: dia,
+                disciplina: disciplina
+            });
+            salvarNoBanco();
+            renderizarTarefasPaginaIndependente();
+            if (taskModal) taskModal.classList.remove("open");
+        } else {
+            // Abre o modal moderno de aviso em vez do alert comum
+            if (alertModal) {
+                alertModal.classList.add("open");
             }
-        });
-    }
+        }
+    });
+}
 
     // Inicializa as renderizações
     renderizarTarefasDashboard();
