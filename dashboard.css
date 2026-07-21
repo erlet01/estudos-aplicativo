@@ -153,10 +153,12 @@ body {
 /* 7. NAVEGAÇÃO INFERIOR MODERNA */
 /* --- NAVEGAÇÃO INFERIOR PROPORCIONAL AO APP --- */
 .bottom-nav {
-    position: absolute;
-    bottom: 30px !important; /* Sobe o menu 30px pra longe do corte */
-    left: 5%;
-    width: 90%;
+    position: fixed !important;
+    bottom: max(20px, env(safe-area-inset-bottom) + 10px) !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important; /* Centraliza perfeitamente em qualquer tela */
+    width: 90% !important;
+    max-width: 370px !important;
     height: 60px;
     background: rgba(19, 9, 36, 0.98) !important;
     backdrop-filter: blur(12px);
@@ -165,11 +167,10 @@ body {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    z-index: 999;
+    z-index: 9999 !important;
     padding: 0 10px;
     box-sizing: border-box;
 }
-
 /* Botões da navegação */
 .bottom-nav .nav-item {
     background: transparent !important;
