@@ -42,14 +42,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const navHome = document.getElementById("nav-home");
-const navTasks = document.getElementById("nav-tasks");
 const navStudies = document.getElementById("nav-studies");
 
 if (navHome) {
     navHome.addEventListener("click", () => { window.location.href = "dashboard.html"; });
-}
-if (navTasks) {
-    navTasks.addEventListener("click", () => { window.location.href = "tarefas.html"; });
 }
 if (navStudies) {
     navStudies.addEventListener("click", () => { window.location.href = "estudos.html"; });
