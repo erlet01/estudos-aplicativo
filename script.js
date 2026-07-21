@@ -110,6 +110,12 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!listContainerDashboard) return;
         listContainerDashboard.innerHTML = "";
 
+        const rotulos = {
+            todo: "Aguardando",
+            doing: "Em preparo",
+            done: "Concluído"
+        };
+
         let copiaOrdenada = [...arrayTarefas].sort((a, b) => {
             if (a.status === "done" && b.status !== "done") return 1;
             if (a.status !== "done" && b.status === "done") return -1;
@@ -121,23 +127,55 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const item = document.createElement("div");
             item.className = `task-item status-${tarefa.status}`;
+            
             item.innerHTML = `
-                <div style="display:flex; flex-direction:column; gap:4px;">
+                <div class="task-info">
                     <span class="task-text">${tarefa.texto}</span>
-                    <small style="color:#64748b; font-size:11px; font-weight:600;">${tarefa.disciplina || 'Geral'}</small>
+                    <small class="task-subject">${tarefa.disciplina || 'Geral'}</small>
                 </div>
-                <select class="status-select" data-index="${indiceReal}">
-                    <option value="todo" ${tarefa.status === 'todo' ? 'selected' : ''}>Aguardando</option>
-                    <option value="doing" ${tarefa.status === 'doing' ? 'selected' : ''}>Em preparo</option>
-                    <option value="done" ${tarefa.status === 'done' ? 'selected' : ''}>Concluído</option>
-                </select>
+                
+                <div class="task-actions">
+                    <div class="custom-select-wrapper task-status-wrapper">
+                        <button type="button" class="custom-select-trigger status-badge badge-${tarefa.status}">
+                            <span>${rotulos[tarefa.status]}</span>
+                        </button>
+                        <div class="custom-options">
+                            <div class="custom-option ${tarefa.status === 'todo' ? 'selected' : ''}" data-value="todo">
+                                <span class="dot todo"></span> Aguardando
+                            </div>
+                            <div class="custom-option ${tarefa.status === 'doing' ? 'selected' : ''}" data-value="doing">
+                                <span class="dot doing"></span> Em preparo
+                            </div>
+                            <div class="custom-option ${tarefa.status === 'done' ? 'selected' : ''}" data-value="done">
+                                <span class="dot done"></span> Concluído
+                            </div>
+                        </div>
+                    </div>
+                </div>
             `;
 
-            item.querySelector(".status-select").addEventListener("change", (e) => {
-                const idx = e.target.getAttribute("data-index");
-                arrayTarefas[idx].status = e.target.value;
-                salvarNoBanco();
-                renderizarTarefasDashboard();
+            // Controle do clique para abrir/fechar o menu do card na dashboard
+            const wrapper = item.querySelector('.task-status-wrapper');
+            const trigger = item.querySelector('.custom-select-trigger');
+            const options = item.querySelectorAll('.custom-option');
+
+            trigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                document.querySelectorAll('.custom-select-wrapper').forEach(w => {
+                    if (w !== wrapper) w.classList.remove('open');
+                });
+                wrapper.classList.toggle('open');
+            });
+
+            options.forEach(opt => {
+                opt.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const novoStatus = opt.getAttribute('data-value');
+                    arrayTarefas[indiceReal].status = novoStatus;
+                    salvarNoBanco();
+                    renderizarTarefasDashboard();
+                    renderizarTarefasPaginaIndependente();
+                });
             });
 
             listContainerDashboard.appendChild(item);
