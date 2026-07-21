@@ -21,24 +21,21 @@ body {
     position: relative;
     width: 100%;
     max-width: 410px;
-    /* Usa a altura inteira da tela visível no celular sem estourar */
     height: 100vh;
-    height: 100dvh; /* dvh considera dinamicamente a barra do navegador do celular */
-    max-height: 820px;
-    border-radius: 30px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    height: 100dvh;
+    max-height: 100%; /* Força a moldura a nunca passar da tela do aparelho */
+    border-radius: 0;  /* No celular preenche sem cortar cantos */
     overflow: hidden;
     background-color: #0b0314;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
 }
 
 /* CONTEÚDO ROLÁVEL (A ROLAGEM ACONTECE APENAS AQUI DENTRO) */
 .dashboard-content {
     flex: 1;
     overflow-y: auto !important;
-    padding: 0 20px 90px 20px !important; /* Espaço para o menu não cobrir o final */
+    padding: 0 20px 110px 20px !important; /* Dá espaço pro menu subir */
     box-sizing: border-box;
 }
 
@@ -157,14 +154,14 @@ body {
 /* --- NAVEGAÇÃO INFERIOR PROPORCIONAL AO APP --- */
 .bottom-nav {
     position: absolute;
-    bottom: 12px; /* Eleva o menu 12px para longe da borda inferior */
+    bottom: 30px !important; /* Sobe o menu 30px pra longe do corte */
     left: 5%;
-    width: 90%;   /* Fica flutuante e bem centralizado */
+    width: 90%;
     height: 60px;
     background: rgba(19, 9, 36, 0.98) !important;
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(124, 58, 237, 0.3);
-    border-radius: 20px !important; /* Visual estilo 'pílula' flutuante */
+    border: 1px solid rgba(124, 58, 237, 0.4);
+    border-radius: 20px !important;
     display: flex;
     justify-content: space-around;
     align-items: center;
