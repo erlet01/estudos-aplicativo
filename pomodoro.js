@@ -19,6 +19,28 @@ document.addEventListener("DOMContentLoaded", () => {
     const customInput = document.getElementById('custom-min');
     const btnSetCustom = document.getElementById('btn-set-custom');
     const timeOptionsContainer = document.getElementById('time-options');
+    // Elementos do Modal
+    const modal = document.getElementById('custom-modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalMessage = document.getElementById('modal-message');
+    const modalIcon = document.getElementById('modal-icon');
+    const btnModalClose = document.getElementById('btn-modal-close');
+
+    function showNotification(title, message, iconName) {
+        if (!modal) return;
+        if (modalTitle) modalTitle.textContent = title;
+        if (modalMessage) modalMessage.textContent = message;
+        if (modalIcon && iconName) {
+            modalIcon.innerHTML = `<i class="material-icons">${iconName}</i>`;
+        }
+        modal.classList.add('active');
+    }
+
+    if (btnModalClose) {
+        btnModalClose.addEventListener('click', () => {
+            modal.classList.remove('active');
+        });
+    }
 
     // Atualiza os números no visor no formato 00:00
     function updateDisplay() {
@@ -67,14 +89,22 @@ document.addEventListener("DOMContentLoaded", () => {
         timerId = null;
 
         if (currentMode === 'pomodoro') {
-            alert("Sessão de foco terminada! Iniciando pausa...");
+            showNotification(
+                "Sessão Concluída! 🎉", 
+                "Excelente trabalho! Sua pausa de 5 minutos já começou.", 
+                "free_breakfast"
+            );
             setMode('pausa');
         } else {
-            alert("Pausa terminada! Volte ao foco!");
+            showNotification(
+                "Pausa Finalizada! ⚡", 
+                "Hora de voltar ao foco. Novo ciclo iniciado!", 
+                "fitness_center"
+            );
             setMode('pomodoro');
         }
 
-        startTimer(); // Reinicia o cronômetro para o próximo ciclo
+        startTimer(); // Ciclo Automático
     }
 
     // Inicia a contagem regressiva
