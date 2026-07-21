@@ -110,20 +110,67 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!listContainerDashboard) return;
         listContainerDashboard.innerHTML = "";
 
+        const dataAtual = new Date();
+        const numeroDiaHoje = dataAtual.getDay(); // 0 = Domingo, 1 = Segunda, ... 6 = Sábado
+        const diaHojeStr = numeroDiaHoje.toString();
+
+        // Mapeamento das matérias de cada dia para comparar
+        const materiasPorDia = {
+            1: ["Arquitetura de Computadores"],
+            2: ["Engenharia de Software"],
+            3: ["Práticas de Programação"],
+            4: ["Carreira e Futuro"],
+            5: ["Cultura"],
+            6: ["Outros / Atividades"],
+            0: []
+        };
+
+        const materiasDeHoje = materiasPorDia[numeroDiaHoje] || [];
+
         const rotulos = {
             todo: "Aguardando",
             doing: "Em preparo",
             done: "Concluído"
         };
 
-        let copiaOrdenada = [...arrayTarefas].sort((a, b) => {
+        // 1. Filtra tarefas: se for para o dia de hoje OU se for da disciplina do dia de hoje
+        let tarefasExibidas = arrayTarefas.filter(tarefa => {
+            const eDoDia = (tarefa.dia === diaHojeStr);
+            const eDaMateria = tarefasDeHojePossuiMateria(tarefa.disciplina, materiasDeHoje);
+            
+            // Se a tarefa não tem dia nem disciplina (antiga), mantemos visível
+            const eAntigaSemDia = (tarefa.dia === undefined);
+
+            return eDoDia || eDaMateria || eAntigaSemDia;
+        });
+
+        function tarefasDeHojePossuiMateria(disciplinaTarefa, listaMateriasHoje) {
+            if (!disciplinaTarefa) return false;
+            return listaMateriasHoje.some(materia => 
+                disciplinaTarefa.toLowerCase().includes(materia.toLowerCase())
+            );
+        }
+
+        // 2. Ordena colocando as tarefas concluídas no final
+        tarefasExibidas.sort((a, b) => {
             if (a.status === "done" && b.status !== "done") return 1;
             if (a.status !== "done" && b.status === "done") return -1;
             return 0;
         });
 
-        copiaOrdenada.forEach((tarefa) => {
-            const indiceReal = arrayTarefas.findIndex(t => t.texto === tarefa.texto && t.status === tarefa.status);
+        // Mensagem caso não haja tarefas relacionadas a hoje
+        if (tarefasExibidas.length === 0) {
+            listContainerDashboard.innerHTML = `
+                <div style="text-align: center; color: #64748b; padding: 20px 0; font-size: 14px;">
+                    Nenhuma tarefa agendada ou relacionada a hoje! 🎉
+                </div>
+            `;
+            return;
+        }
+
+        // Renderiza cada tarefa filtrada
+        tarefasExibidas.forEach((tarefa) => {
+            const indiceReal = arrayTarefas.findIndex(t => t === tarefa);
 
             const item = document.createElement("div");
             item.className = `task-item status-${tarefa.status}`;
@@ -154,7 +201,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
             `;
 
-            // Controle do clique para abrir/fechar o menu do card na dashboard
+            // Controle do menu dropdown
             const wrapper = item.querySelector('.task-status-wrapper');
             const trigger = item.querySelector('.custom-select-trigger');
             const options = item.querySelectorAll('.custom-option');
