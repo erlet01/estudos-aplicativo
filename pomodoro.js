@@ -19,7 +19,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function saveCompletedSession() {
         const history = getSessionsHistory();
-        history.push(new Date().toISOString());
+        // Converte focusDuration (que está em segundos) para minutos
+        const minutesSpent = Math.round(focusDuration / 60); 
+        
+        history.push({
+            date: new Date().toISOString(),
+            duration: minutesSpent
+        });
+
         localStorage.setItem('pomodoro_history', JSON.stringify(history));
     }
     const display = document.getElementById('timer');

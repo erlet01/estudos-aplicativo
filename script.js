@@ -762,35 +762,67 @@ if (typeof renderFullCalendar === 'function') {
 
 // --- CARREGA ESTATÍSTICAS DO POMODORO NA DASHBOARD ---
 function loadPomodoroStats() {
-    try {
-        const history = JSON.parse(localStorage.getItem('pomodoro_history') || '[]');
-        const now = new Date();
+        try {
+            const history = JSON.parse(localStorage.getItem('pomodoro_history') || '[]');
+            const now = new Date();
 
-        // Calculando sessões de Hoje
-        const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-        const todayCount = history.filter(d => new Date(d) >= startOfToday).length;
+            const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const sevenDaysAgo = new Date();
+            sevenDaysAgo.setDate(now.getDate() - 7);
+            const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
-        // Calculando sessões dos últimos 7 dias (Semana)
-        const sevenDaysAgo = new Date();
-        sevenDaysAgo.setDate(now.getDate() - 7);
-        const weekCount = history.filter(d => new Date(d) >= sevenDaysAgo).length;
+            // Função para somar os minutos dos registros
+            function sumMinutes(items) {
+                return items.reduce((total, item) => {
+                    // Suporte para registros antigos (número fixo de 25m) ou novos (item.duration)
+                    const mins = typeof item === 'object' && item.duration ? item.duration : 25;
+                    return total + mins;
+                }, 0);
+            }
 
-        // Calculando sessões deste Mês
-        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-        const monthCount = history.filter(d => new Date(d) >= startOfMonth).length;
+            // Função para formatar bonito (ex: 45m ou 1h 20m)
+            function formatTime(totalMinutes) {
+                if (totalMinutes < 60) {
+                    return `${totalMinutes}m`;
+                }
+                const hours = Math.floor(totalMinutes / 60);
+                const mins = totalMinutes % 60;
+                return mins > 0 ? `${hours}h ${mins}m` : `${hours}h`;
+            }
 
-        // Atualizando os IDs na Dashboard
-        const elToday = document.getElementById('dash-stat-today');
-        const elWeek = document.getElementById('dash-stat-week');
-        const elMonth = document.getElementById('dash-stat-month');
+            // Filtra os históricos por período
+            const todayItems = history.filter(item => {
+                const itemDate = new Date(typeof item === 'object' ? item.date : item);
+                return itemDate >= startOfToday;
+            });
 
-        if (elToday) elToday.textContent = todayCount;
-        if (elWeek) elWeek.textContent = weekCount;
-        if (elMonth) elMonth.textContent = monthCount;
-    } catch(e) {
-        console.error("Erro ao carregar histórico do Pomodoro:", e);
+            const weekItems = history.filter(item => {
+                const itemDate = new Date(typeof item === 'object' ? item.date : item);
+                return itemDate >= sevenDaysAgo;
+            });
+
+            const monthItems = history.filter(item => {
+                const itemDate = new Date(typeof item === 'object' ? item.date : item);
+                return itemDate >= startOfMonth;
+            });
+
+            // Calcula os tempos totais
+            const todayMin = sumMinutes(todayItems);
+            const weekMin = sumMinutes(weekItems);
+            const monthMin = sumMinutes(monthItems);
+
+            // Atualizando os IDs na Dashboard
+            const elToday = document.getElementById('dash-stat-today');
+            const elWeek = document.getElementById('dash-stat-week');
+            const elMonth = document.getElementById('dash-stat-month');
+
+            if (elToday) elToday.textContent = formatTime(todayMin);
+            if (elWeek) elWeek.textContent = formatTime(weekMin);
+            if (elMonth) elMonth.textContent = formatTime(monthMin);
+        } catch(e) {
+            console.error("Erro ao carregar histórico do Pomodoro:", e);
+        }
     }
-}
 
 // Executa a leitura das estatísticas
 loadPomodoroStats();
