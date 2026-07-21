@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomodoro Focus</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="gran.css">
+    <link rel="stylesheet" href="pomodoro.css">
+</head>
+<body>
+    <div class="app-screen">
+        <header class="app-header">
+            <div style="width: 40px;"></div>
+            <h2>Foco Pomodoro</h2>
+            <div style="width: 40px;"></div>
+        </header>
+
+        <main class="dashboard-content" style="text-align: center;">
+            <div class="modes-container">
+                <button class="mode-btn active">Pomodoro</button>
+                <button class="mode-btn">Pausa</button>
+            </div>
+
+            <div class="timer-display">
+                <div class="circle-container">
+                    <div class="timer-value" id="timer">25:00</div>
+                </div>
+                <div class="timer-label" id="status-label">Hora de focar</div>
+            </div>
+
+            <div class="timer-controls">
+                <button class="btn-timer btn-reset" id="reset"><i class="material-icons">refresh</i></button>
+                <button class="btn-timer btn-play" id="start-pause"><i class="material-icons">play_arrow</i></button>
+            </div>
+        </main>
+
+        <nav class="bottom-nav">
+            <button class="nav-item" onclick="location.href='dashboard.html'"><i class="material-icons">home</i><span>Início</span></button>
+            <button class="nav-item" onclick="location.href='estudos.html'"><i class="material-icons">school</i><span>Estudos</span></button>
+            <button class="nav-item active" onclick="location.href='pomodoro.html'"><i class="material-icons">timer</i><span>Foco</span></button>
+        </nav>
+    </div>
+
+    <script src="pomodoro.js"></script>
+</body>
+</html>

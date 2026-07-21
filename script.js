@@ -43,12 +43,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const navHome = document.getElementById("nav-home");
 const navStudies = document.getElementById("nav-studies");
+const navPomodoro = document.getElementById("nav-pomodoro");
 
 if (navHome) {
     navHome.addEventListener("click", () => { window.location.href = "dashboard.html"; });
 }
 if (navStudies) {
     navStudies.addEventListener("click", () => { window.location.href = "estudos.html"; });
+}
+if (navPomodoro) {
+    navPomodoro.addEventListener("click", () => {
+        window.location.href = "pomodoro.html";
+    });
 }
 
     // --- 3. LÓGICA DO CALENDÁRIO E CRONOGRAMA (DASHBOARD) ---
