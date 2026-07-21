@@ -756,7 +756,43 @@ if (nextMonthBtn) {
         renderFullCalendar();
     });
 }
+if (typeof renderFullCalendar === 'function') {
+    renderFullCalendar();
+}
 
-// Executa automaticamente ao carregar qualquer página com calendário
-document.addEventListener("DOMContentLoaded", renderFullCalendar);
+// --- CARREGA ESTATÍSTICAS DO POMODORO NA DASHBOARD ---
+function loadPomodoroStats() {
+    try {
+        const history = JSON.parse(localStorage.getItem('pomodoro_history') || '[]');
+        const now = new Date();
+
+        // Calculando sessões de Hoje
+        const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const todayCount = history.filter(d => new Date(d) >= startOfToday).length;
+
+        // Calculando sessões dos últimos 7 dias (Semana)
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(now.getDate() - 7);
+        const weekCount = history.filter(d => new Date(d) >= sevenDaysAgo).length;
+
+        // Calculando sessões deste Mês
+        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+        const monthCount = history.filter(d => new Date(d) >= startOfMonth).length;
+
+        // Atualizando os IDs na Dashboard
+        const elToday = document.getElementById('dash-stat-today');
+        const elWeek = document.getElementById('dash-stat-week');
+        const elMonth = document.getElementById('dash-stat-month');
+
+        if (elToday) elToday.textContent = todayCount;
+        if (elWeek) elWeek.textContent = weekCount;
+        if (elMonth) elMonth.textContent = monthCount;
+    } catch(e) {
+        console.error("Erro ao carregar histórico do Pomodoro:", e);
+    }
+}
+
+// Executa a leitura das estatísticas
+loadPomodoroStats();
+
 });

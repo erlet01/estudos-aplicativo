@@ -9,6 +9,19 @@ let timerId = null;
 let currentMode = 'pomodoro'; // 'pomodoro' ou 'pausa'
 
 document.addEventListener("DOMContentLoaded", () => {
+    function getSessionsHistory() {
+        try {
+            return JSON.parse(localStorage.getItem('pomodoro_history') || '[]');
+        } catch(e) {
+            return [];
+        }
+    }
+
+    function saveCompletedSession() {
+        const history = getSessionsHistory();
+        history.push(new Date().toISOString());
+        localStorage.setItem('pomodoro_history', JSON.stringify(history));
+    }
     const display = document.getElementById('timer');
     const btnStartPause = document.getElementById('start-pause');
     const btnReset = document.getElementById('reset');
@@ -89,6 +102,9 @@ document.addEventListener("DOMContentLoaded", () => {
         timerId = null;
 
         if (currentMode === 'pomodoro') {
+            // REGISTRA A SESSÃO NO LOCALSTORAGE
+            saveCompletedSession();
+
             showNotification(
                 "Sessão Concluída! 🎉", 
                 "Excelente trabalho! Sua pausa de 5 minutos já começou.", 
@@ -177,6 +193,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Exibição inicial
+// Exibição inicial
     updateDisplay();
 });
