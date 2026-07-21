@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Área de Estudos</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="tarefas.css">
+    <link rel="stylesheet" href="estudos.css">
+</head>
+<body>
+
+    <div class="app-screen">
+        <div class="sphere sphere-4"></div>
+        
+        <div class="dashboard-content">
+            <header class="dashboard-header">
+                <div class="header-top-row">
+                    <h1 style="color: white; font-size: 30px; font-weight: 700;">Área de Estudos</h1>
+                </div>
+            </header>
+
+            <main class="main-stats" style="margin-top: 10px;">
+                <div class="faculty-card">
+                    <span class="faculty-badge">Tecnólogo</span>
+                    <h2 class="faculty-name">Gran Faculdade</h2>
+                    <p class="faculty-course">Análise e Desenvolvimento de Sistemas</p>
+                </div>
+            </main>
+        </div>
+
+        <nav class="bottom-nav">
+            <button class="nav-item" id="nav-home">
+                <i class="material-icons">home</i>
+                <span>Início</span>
+            </button>
+            <button class="nav-item" id="nav-tasks">
+                <i class="material-icons">check_circle</i>
+                <span>Tarefas</span>
+            </button>
+            <button class="nav-item active" id="nav-studies">
+                <i class="material-icons">school</i>
+                <span>Estudos</span>
+            </button>
+        </nav>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

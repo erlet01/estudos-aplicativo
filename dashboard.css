@@ -13,10 +13,10 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
+    overflow: hidden; /* Mantém a página de fora travada e centralizada */
 }
 
-/* 2. ESTRUTURA DO CELULAR (FORÇANDO ALINHAMENTO NO TOPO) */
+/* 2. ESTRUTURA DO CELULAR (MOLDURA FIXA E PROPORCIONAL) */
 .app-screen {
     position: relative;
     width: 100%;
@@ -29,26 +29,24 @@ body {
     background-color: #0b0314;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start; /* Alinha o conteúdo estritamente no topo */
-}
-
-/* 3. A TELA DA DASHBOARD */
-.dashboard {
-    width: 100%;
-    height: 100%;
-    padding: 25px 20px 20px 20px; /* Margem sutil no topo para não colar na carcaça do celular */
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start; /* Remove espaçamentos automáticos que jogam pro centro */
-}
-
-/* 4. CONTEÚDO DA DASHBOARD */
-.dashboard-content {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
     justify-content: flex-start;
-    flex-grow: 1; /* Ocupa o espaço útil superior */
+}
+
+/* CONTEÚDO ROLÁVEL (A ROLAGEM ACONTECE APENAS AQUI DENTRO) */
+.dashboard-content {
+    flex: 1;
+    overflow-y: auto !important;
+    padding: 0 20px 90px 20px !important; /* Espaço para o menu não cobrir o final */
+    box-sizing: border-box;
+}
+
+/* Esconde a barra de rolagem visualmente para manter o visual limpo de app */
+.dashboard-content::-webkit-scrollbar {
+    display: none;
+}
+.dashboard-content {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
 /* 5. CABEÇALHO DO CALENDÁRIO (FIXADO NO TOPO) */
@@ -153,25 +151,61 @@ body {
 }
 
 /* 7. MENU INFERIOR FIXADO EM BAIXO */
+/* 7. NAVEGAÇÃO INFERIOR MODERNA */
+/* --- NAVEGAÇÃO INFERIOR PROPORCIONAL AO APP --- */
 .bottom-nav {
-    height: 70px;
+    position: absolute; /* Prende o menu dentro do .app-screen */
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 65px;
+    background: rgba(19, 9, 36, 0.95) !important;
+    backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(124, 58, 237, 0.2);
     display: flex;
     justify-content: space-around;
     align-items: center;
-    background: rgba(13, 4, 26, 0.95);
-    backdrop-filter: blur(10px);
-    border-radius: 25px 25px 0 0;
-    margin: 0 -20px -20px -20px; /* Compensa o padding da dashboard para colar nas bordas */
+    z-index: 999;
+    padding: 0 10px;
+    box-sizing: border-box;
+    border-bottom-left-radius: 30px; /* Acompanha a curva do aplicativo */
+    border-bottom-right-radius: 30px;
 }
 
-.bottom-nav .material-icons {
-    color: #4b5563;
-    font-size: 28px;
+/* Botões da navegação */
+.bottom-nav .nav-item {
+    background: transparent !important;
+    border: none !important;
+    outline: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #64748b !important;
+    font-size: 11px;
+    font-weight: 600;
     cursor: pointer;
+    gap: 3px;
+    padding: 6px 12px;
+    border-radius: 12px;
+    transition: all 0.2s ease;
 }
 
-.bottom-nav .active {
-    color: #7c3aed;
+.bottom-nav .nav-item i {
+    font-size: 22px !important;
+    color: inherit !important;
+}
+
+.bottom-nav .nav-item.active {
+    color: #a78bfa !important;
+}
+
+.bottom-nav .nav-item.active i {
+    color: #a78bfa !important;
+}
+
+.bottom-nav .nav-item:hover {
+    color: #ffffff !important;
 }
 
 /* ESFERA DE FUNDO */
