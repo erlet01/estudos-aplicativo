@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerenciador de Tarefas</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    
     <link rel="stylesheet" href="dashboard.css">
-    
     <link rel="stylesheet" href="tarefas.css">
 </head>
 <body>
@@ -54,55 +52,67 @@
         </div>
 
         <div class="task-modal" id="task-modal">
-        <div class="task-modal-content">
-            <h3>Nova Tarefa</h3>
-            
-            <div class="form-group">
-                <label>Nome da Tarefa</label>
-                <input type="text" id="modal-task-name" placeholder="Ex: Fazer resumo, assistir aula...">
-            </div>
+            <div class="task-modal-content">
+                <h3>Nova Tarefa</h3>
+                
+                <div class="form-group">
+                    <label>Nome da Tarefa</label>
+                    <input type="text" id="modal-task-name" placeholder="Ex: Fazer resumo, assistir aula...">
+                </div>
 
-            <div class="form-group">
-                <label>Dia da Semana</label>
-                <div class="custom-select-wrapper">
-                    <button type="button" class="custom-select-trigger" id="day-trigger" data-value="1">Segunda-feira</button>
-                    <div class="custom-options" id="day-options">
-                <div class="custom-option selected" data-value="1">Segunda-feira</div>
-                        <div class="custom-option" data-value="2">Terça-feira</div>
-                        <div class="custom-option" data-value="3">Quarta-feira</div>
-                        <div class="custom-option" data-value="4">Quinta-feira</div>
-                        <div class="custom-option" data-value="5">Sexta-feira</div>
-                        <div class="custom-option" data-value="6">Sábado</div>
-                        <div class="custom-option" data-value="0">Domingo</div>
+                <div class="form-group">
+                    <label>Dia da Semana</label>
+                    <div class="custom-select-wrapper">
+                        <button type="button" class="custom-select-trigger" id="day-trigger" data-value="1">Segunda-feira</button>
+                        <div class="custom-options" id="day-options">
+                            <div class="custom-option selected" data-value="1">Segunda-feira</div>
+                            <div class="custom-option" data-value="2">Terça-feira</div>
+                            <div class="custom-option" data-value="3">Quarta-feira</div>
+                            <div class="custom-option" data-value="4">Quinta-feira</div>
+                            <div class="custom-option" data-value="5">Sexta-feira</div>
+                            <div class="custom-option" data-value="6">Sábado</div>
+                            <div class="custom-option" data-value="0">Domingo</div>
+                        </div>
                     </div>
-                </select>
-            </div>
+                </div>
 
-            <div class="form-group">
-                <label>Disciplina</label>
-                <div class="custom-select-wrapper">
-                    <button type="button" class="custom-select-trigger" id="subject-trigger" data-value="Arquitetura de Computadores">Arquitetura de Computadores</button>
-                    <div class="custom-options" id="subject-options">
-                        <div class="custom-option selected" data-value="Arquitetura de Computadores">Arquitetura de Computadores</div>
-                        <div class="custom-option" data-value="Engenharia de Software">Engenharia de Software</div>
-                        <div class="custom-option" data-value="Práticas de Programação">Práticas de Programação</div>
-                        <div class="custom-option" data-value="Carreira e Futuro">Carreira e Futuro</div>
-                        <div class="custom-option" data-value="Cultura">Cultura</div>
-                        <div class="custom-option" data-value="Outros">Outros / Atividades</div>
-                </select>
-            </div>
+                <div class="form-group">
+                    <label>Disciplina</label>
+                    <div class="custom-select-wrapper">
+                        <button type="button" class="custom-select-trigger" id="subject-trigger" data-value="Arquitetura de Computadores">Arquitetura de Computadores</button>
+                        <div class="custom-options" id="subject-options">
+                            <div class="custom-option selected" data-value="Arquitetura de Computadores">Arquitetura de Computadores</div>
+                            <div class="custom-option" data-value="Engenharia de Software">Engenharia de Software</div>
+                            <div class="custom-option" data-value="Práticas de Programação">Práticas de Programação</div>
+                            <div class="custom-option" data-value="Carreira e Futuro">Carreira e Futuro</div>
+                            <div class="custom-option" data-value="Cultura">Cultura</div>
+                            <div class="custom-option" data-value="Outros">Outros / Atividades</div>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="modal-actions">
-                <button class="btn-cancel" id="btn-close-modal">Cancelar</button>
-                <button class="btn-save" id="btn-save-task">Adicionar</button>
+                <div class="modal-actions">
+                    <button class="btn-cancel" id="btn-close-modal">Cancelar</button>
+                    <button class="btn-save" id="btn-save-task">Adicionar</button>
+                </div>
             </div>
         </div>
 
-        
-    </div>
-    
+        <div class="confirm-modal" id="confirm-modal">
+            <div class="confirm-modal-content">
+                <div class="confirm-icon">
+                    <i class="material-icons">delete_sweep</i>
+                </div>
+                <h3>Excluir Tarefa?</h3>
+                <p>Você tem certeza que deseja apagar esta tarefa? Esta ação não poderá ser desfeita.</p>
+                <div class="confirm-actions">
+                    <button class="btn-keep" id="btn-cancel-delete">Cancelar</button>
+                    <button class="btn-delete" id="btn-confirm-delete">Excluir</button>
+                </div>
+            </div>
+        </div>
 
-    
+    </div>
 
     <script src="script.js"></script>
 </body>
