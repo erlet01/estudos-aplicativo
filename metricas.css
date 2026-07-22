@@ -1,0 +1,67 @@
+/* --- ESTILOS DA TELA DE MÉTRICAS --- */
+.metrics-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(124, 58, 237, 0.25);
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 20px;
+    backdrop-filter: blur(10px);
+}
+
+.metrics-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #a78bfa;
+    margin-bottom: 16px;
+}
+
+.metrics-card-header h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    margin: 0;
+}
+
+.chart-container-donut {
+    position: relative;
+    max-width: 280px;
+    margin: 0 auto;
+}
+
+.chart-container-bar {
+    position: relative;
+    width: 100%;
+    height: 250px;
+}
+/* --- BOTÃO DE VOLTAR (SETINHA) --- */
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    background: rgba(124, 58, 237, 0.12); /* Fundo roxo suave */
+    border: 1px solid rgba(167, 139, 250, 0.25); /* Borda fina */
+    border-radius: 12px; /* Cantos arredondados */
+    color: #c4b5fd; /* Cor da seta */
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+.btn-back .material-icons {
+    font-size: 20px;
+}
+
+/* Efeitos ao passar o mouse / tocar */
+.btn-back:hover {
+    background: rgba(124, 58, 237, 0.3);
+    color: #ffffff;
+    border-color: #8b5cf6;
+    transform: translateX(-2px); /* Efeito suave da seta deslizando para a esquerda */
+}
+
+.btn-back:active {
+    transform: scale(0.95);
+}

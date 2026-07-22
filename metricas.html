@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Métricas de Desempenho</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="gran.css">
+    <link rel="stylesheet" href="metricas.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="app-screen">
+        <header class="app-header">
+            <button class="btn-back" onclick="location.href='dashboard.html'">
+                <i class="material-icons">arrow_back</i>
+            </button>
+            <h2>Métricas e Desempenho</h2>
+            <div style="width: 40px;"></div>
+        </header>
+
+        <main class="dashboard-content">
+
+            <div class="metrics-card">
+                <div class="metrics-card-header">
+                    <i class="material-icons">pie_chart</i>
+                    <h3>Distribuição de Esforço</h3>
+                </div>
+                <div class="chart-container-donut">
+                    <canvas id="chartEffort"></canvas>
+                </div>
+            </div>
+
+            <div class="metrics-card">
+                <div class="metrics-card-header">
+                    <i class="material-icons">bar_chart</i>
+                    <h3>Análise de Tempo Semanal</h3>
+                </div>
+                <div class="chart-container-bar">
+                    <canvas id="chartWeekly"></canvas>
+                </div>
+            </div>
+
+        </main>
+
+        <nav class="bottom-nav">
+            <button class="nav-item active" onclick="location.href='dashboard.html'"><i class="material-icons">home</i><span>Início</span></button>
+            <button class="nav-item" onclick="location.href='estudos.html'"><i class="material-icons">school</i><span>Estudos</span></button>
+            <button class="nav-item" onclick="location.href='pomodoro.html'"><i class="material-icons">timer</i><span>Foco</span></button>
+        </nav>
+    </div>
+
+    <script src="metricas.js"></script>
+</body>
+</html>
