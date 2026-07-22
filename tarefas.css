@@ -618,3 +618,33 @@
     font-size: 13px !important;
     border-radius: 10px !important;
 }
+/* --- BOTÃO VOLTAR (CANTO SUPERIOR ESQUERDO) --- */
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    background: rgba(124, 58, 237, 0.12);
+    border: 1px solid rgba(167, 139, 250, 0.25);
+    border-radius: 12px;
+    color: #c4b5fd;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+.btn-back .material-icons {
+    font-size: 20px;
+}
+
+.btn-back:hover {
+    background: rgba(124, 58, 237, 0.3);
+    color: #ffffff;
+    border-color: #8b5cf6;
+    transform: translateX(-2px);
+}
+
+.btn-back:active {
+    transform: scale(0.95);
+}
