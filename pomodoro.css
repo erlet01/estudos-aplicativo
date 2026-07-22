@@ -263,3 +263,82 @@
 .modal-card button:active {
     background: #6d28d9;
 }
+/* --- PAINEL DE CONFIGURAÇÃO PRÉVIA --- */
+.session-setup-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(124, 58, 237, 0.3);
+    border-radius: 20px;
+    padding: 16px;
+    margin-bottom: 20px;
+    backdrop-filter: blur(10px);
+}
+
+.setup-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #a78bfa;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.setup-inputs {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.input-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.input-group label {
+    font-size: 11px;
+    color: #8b5cf6;
+    text-transform: uppercase;
+}
+
+.input-group input {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(124, 58, 237, 0.4);
+    border-radius: 10px;
+    padding: 8px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    outline: none;
+}
+
+.input-group input:focus {
+    border-color: #a78bfa;
+}
+
+.preset-chips {
+    display: flex;
+    gap: 8px;
+    justify-content: space-between;
+}
+
+.chip-btn {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(124, 58, 237, 0.2);
+    color: #a78bfa;
+    border-radius: 10px;
+    padding: 6px 0;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.chip-btn.active {
+    background: #7c3aed;
+    color: #fff;
+    border-color: #7c3aed;
+    font-weight: bold;
+}

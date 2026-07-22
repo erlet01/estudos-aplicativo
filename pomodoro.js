@@ -33,12 +33,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnStartPause = document.getElementById('start-pause');
     const btnReset = document.getElementById('reset');
     const statusLabel = document.getElementById('status-label');
-    const btnPomodoro = document.getElementById('btn-mode-pomodoro');
-    const btnPausa = document.getElementById('btn-mode-pausa');
-    const timeButtons = document.querySelectorAll('.time-btn');
-    const customInput = document.getElementById('custom-min');
-    const btnSetCustom = document.getElementById('btn-set-custom');
-    const timeOptionsContainer = document.getElementById('time-options');
+    
+
+    const inputFocus = document.getElementById('focus-min');
+    const inputBreak = document.getElementById('break-min');
+    const presetChips = document.querySelectorAll('.chip-btn');
     // Elementos do Modal
     const modal = document.getElementById('custom-modal');
     const modalTitle = document.getElementById('modal-title');
@@ -76,18 +75,14 @@ document.addEventListener("DOMContentLoaded", () => {
         currentMode = mode;
         pauseTimer();
 
+        applyCustomSettings();
+
         if (mode === 'pomodoro') {
-            if (btnPomodoro) btnPomodoro.classList.add('active');
-            if (btnPausa) btnPausa.classList.remove('active');
-            timeLeft = focusDuration;
             if (statusLabel) statusLabel.textContent = "Hora de focar";
-            if (timeOptionsContainer) timeOptionsContainer.style.display = 'flex';
+            timeLeft = focusDuration;
         } else {
-            if (btnPausa) btnPausa.classList.add('active');
-            if (btnPomodoro) btnPomodoro.classList.remove('active');
-            timeLeft = breakDuration;
             if (statusLabel) statusLabel.textContent = "Pausa curta";
-            if (timeOptionsContainer) timeOptionsContainer.style.display = 'none'; // Esconde opções de tempo durante a pausa
+            timeLeft = breakDuration;
         }
 
         updateDisplay();
@@ -112,16 +107,19 @@ document.addEventListener("DOMContentLoaded", () => {
             // REGISTRA A SESSÃO NO LOCALSTORAGE
             saveCompletedSession();
 
+            const breakMinutes = Math.round(breakDuration / 60);
             showNotification(
                 "Sessão Concluída! 🎉", 
-                "Excelente trabalho! Sua pausa de 5 minutos já começou.", 
+                `Excelente trabalho! Sua pausa de ${breakMinutes} min começou.`, 
                 "free_breakfast"
             );
+            
             setMode('pausa');
         } else {
+            const focusMinutes = Math.round(focusDuration / 60);
             showNotification(
                 "Pausa Finalizada! ⚡", 
-                "Hora de voltar ao foco. Novo ciclo iniciado!", 
+                `Hora de voltar ao foco (${focusMinutes} min). Novo ciclo iniciado!`, 
                 "fitness_center"
             );
             setMode('pomodoro');
@@ -174,32 +172,51 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Botões de Troca de Modo
-    if (btnPomodoro) btnPomodoro.addEventListener('click', () => setMode('pomodoro'));
-    if (btnPausa) btnPausa.addEventListener('click', () => setMode('pausa'));
+// Aplica as durações configuradas nos campos de texto
+    function applyCustomSettings() {
+        const inputFocus = document.getElementById('focus-min');
+        const inputBreak = document.getElementById('break-min');
 
-    // Botões de tempo pré-definido (25m, 30m, 45m, 60m)
-    timeButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            timeButtons.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            const min = parseInt(btn.getAttribute('data-time'));
-            setDuration(min);
-        });
-    });
+        const fMin = inputFocus ? (parseInt(inputFocus.value) || 25) : 25;
+        const bMin = inputBreak ? (parseInt(inputBreak.value) || 5) : 5;
 
-    // Botão de tempo customizado (Digitado no input)
-    if (btnSetCustom && customInput) {
-        btnSetCustom.addEventListener('click', () => {
-            const min = parseInt(customInput.value);
-            if (min && min > 0) {
-                timeButtons.forEach(b => b.classList.remove('active'));
-                setDuration(min);
-                customInput.value = '';
-            }
-        });
+        focusDuration = fMin * 60;
+        breakDuration = bMin * 60;
+
+        if (currentMode === 'pomodoro') {
+            timeLeft = focusDuration;
+        } else {
+            timeLeft = breakDuration;
+        }
+        updateDisplay();
     }
 
+    // Eventos para atualizar quando o usuário digita no input
+    if (inputFocus) inputFocus.addEventListener('change', () => {
+        presetChips.forEach(c => c.classList.remove('active'));
+        applyCustomSettings();
+    });
+
+    if (inputBreak) inputBreak.addEventListener('change', () => {
+        presetChips.forEach(c => c.classList.remove('active'));
+        applyCustomSettings();
+    });
+
+    // Eventos para os botões atalho (chips 25/5, 45/10, etc)
+    presetChips.forEach(chip => {
+        chip.addEventListener('click', () => {
+            presetChips.forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+
+            const f = chip.getAttribute('data-focus');
+            const b = chip.getAttribute('data-break');
+
+            if (inputFocus) inputFocus.value = f;
+            if (inputBreak) inputBreak.value = b;
+
+            applyCustomSettings();
+        });
+    });
 // Exibição inicial
     updateDisplay();
 });
