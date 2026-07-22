@@ -493,7 +493,7 @@
 /* --- MENU DE STATUS CUSTOMIZADO ULTRA MODERNO --- */
 .task-status-wrapper {
     position: relative;
-    width: 135px;
+    width: max-content;
 }
 
 /* Botão principal do Status (Badge) */
@@ -501,12 +501,12 @@
     background: rgba(26, 15, 46, 0.85) !important;
     border: 1px solid rgba(124, 58, 237, 0.35) !important;
     border-radius: 12px !important;
-    padding: 8px 14px !important;
+    padding: 6px 10px !important; /* Diminuído para não sobrar espaço nas laterais */
+    gap: 8px;                      /* Espaço entre a palavra e a setinha */
     color: #f1f5f9 !important;
     font-size: 12px !important;
     font-weight: 600 !important;
-    display: flex !important;
-    justify-content: space-between !important;
+    display: inline-flex !important; /* Garante que o botão só ocupe o tamanho do texto */
     align-items: center !important;
     cursor: pointer;
     backdrop-filter: blur(8px);
@@ -646,5 +646,57 @@
 }
 
 .btn-back:active {
+    transform: scale(0.95);
+}
+/* --- BOTÃO REDONDO E GRANDE COM O SINAL DE + --- */
+.add-task-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: 15px 0 25px 0; /* Espaçamento em cima e embaixo */
+}
+.btn-add-task-main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    width: 56px;               /* Tamanho ligeiramente mais compacto */
+    height: 56px;
+    padding: 0;
+    margin: 0 auto;
+    
+    background: rgba(139, 92, 246, 0.22); 
+    border: 1px solid rgba(167, 139, 250, 0.6);/* Borda fina e discreta */
+    border-radius: 50%;
+    
+    color: #d8b4fe;                               /* Roxo claro para o ícone */
+    cursor: pointer;
+    box-shadow: none;                             /* Sem sombra chamativa */
+    transition: all 0.25s ease;
+
+    box-shadow: 0 0 12px rgba(139, 92, 246, 0.35); 
+    transition: all 0.2s ease-in-out;
+}
+
+/* Ícone do + bem visível e grande */
+.btn-add-task-main .material-icons {
+    font-size: 28px;
+    color: #a78bfa;
+    transition: transform 0.25s ease;
+}
+
+/* Efeito ao passar o mouse ou tocar */
+.btn-add-task-main:hover {
+    background: rgba(124, 58, 237, 0.25);       /* Fica só um pouco mais aceso */
+    border-color: #8b5cf6;
+    color: #ffffff;
+}
+.btn-add-task-main:hover {
+    background: rgba(124, 58, 237, 0.25);
+    border-color: #8b5cf6;
+    transform: scale(1.08); /* Aumenta o botão levemente */
+}
+.btn-add-task-main:active {
     transform: scale(0.95);
 }

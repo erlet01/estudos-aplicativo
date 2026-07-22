@@ -16,16 +16,19 @@
         <div class="dashboard-content">
             <header class="dashboard-header">
                 <div class="header-top-row">
-                    <button class="btn-back" onclick="location.href='dashboard.html'">
+    <button class="btn-back" onclick="location.href='dashboard.html'">
         <i class="material-icons">arrow_back</i>
     </button>
-                    <h1 style="color: white; font-size: 30px; font-weight: 700;">Minhas Tarefas</h1>
-                    <button id="page-add-task-btn" style="background:none; border:none; color:#7c3aed; cursor:pointer;">
-                        <i class="material-icons" style="font-size: 32px;">add_circle</i>
-                    </button>
-                </div>
+    <h1 style="color: white; font-size: 26px; font-weight: 700; margin: 0;">Minhas Tarefas</h1>
+    <div style="width: 38px;"></div>
+</div>
             </header>
-
+<div class="add-task-container">
+    <button class="btn-add-task-main" id="page-add-task-btn">
+        <i class="material-icons">add</i>
+        <span></span>
+    </button>
+</div>
             <main class="main-stats" style="margin-top: 15px;">
                 <div class="kanban-container">
                     
@@ -46,12 +49,6 @@
 
                 </div>
             </main>
-
-            <nav class="bottom-nav">
-                <i class="material-icons" id="nav-home">home</i>
-                <i class="material-icons active" id="nav-tasks">assignment</i>
-                <i class="material-icons">settings</i>
-            </nav>
         </div>
 
         <div class="task-modal" id="task-modal">
