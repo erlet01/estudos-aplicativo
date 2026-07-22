@@ -51,6 +51,110 @@
                     <li class="empty-msg">Clique em um dia do mês acima para ver ou criar compromissos.</li>
                 </ul>
             </div>
+            <div class="section-header">
+    <h2 class="section-title">Minhas Disciplinas</h2>
+    <button class="btn-add-subject" id="btn-open-subject-modal" title="Adicionar Disciplina">
+        <i class="material-icons">add</i>
+    </button>
+</div>
+
+    <div class="subjects-list" id="subjects-container">
+    </div>
+
+<div class="subject-modal" id="subject-modal">
+    <div class="subject-modal-content">
+        <div class="modal-header">
+            <h3>Nova Disciplina</h3>
+            <button class="btn-close-icon" id="btn-close-subject-modal">
+                <i class="material-icons">close</i>
+            </button>
+        </div>
+
+        <div class="form-group">
+            <label>Nome da Disciplina</label>
+            <input type="text" id="modal-subject-name" placeholder="Ex: Engenharia de Software">
+        </div>
+
+        <div class="form-group">
+            <label>Semestre</label>
+            <input type="text" id="modal-subject-semester" placeholder="Ex: 1º Semestre">
+        </div>
+
+        <div class="form-group">
+            <label>Unidades de Aprendizagem (UA)</label>
+            <div class="ua-input-wrapper">
+                <input type="text" id="input-ua-temp" placeholder="Ex: UA 01 - Introdução aos Conceitos">
+                <button type="button" class="btn-add-ua" id="btn-add-ua">
+                    <i class="material-icons">add</i>
+                </button>
+            </div>
+            <div class="ua-chips-container" id="ua-chips-list">
+                </div>
+        </div>
+
+        <div class="modal-actions">
+            <button class="btn-cancel" id="btn-cancel-subject">Cancelar</button>
+            <button class="btn-save" id="btn-save-subject">Salvar Disciplina</button>
+        </div>
+    </div>
+</div>
+
+        <div class="subject-card">
+            <div class="subject-info">
+                <div class="subject-icon">
+                    <i class="material-icons">memory</i>
+                </div>
+                <div class="subject-details">
+                    <h3>Arquitetura de Computadores</h3>
+                    <p>1º Semestre • 80h</p>
+                </div>
+            </div>
+            <div class="subject-status">
+                <span class="status-tag in-progress">Em Andamento</span>
+                <button class="btn-card-action">
+                    <i class="material-icons">chevron_right</i>
+                </button>
+            </div>
+        </div>
+
+        <div class="subject-card">
+            <div class="subject-info">
+                <div class="subject-icon">
+                    <i class="material-icons">code</i>
+                </div>
+                <div class="subject-details">
+                    <h3>Práticas de Programação</h3>
+                    <p>1º Semestre • 100h</p>
+                </div>
+            </div>
+            <div class="subject-status">
+                <span class="status-tag completed">Concluída</span>
+                <button class="btn-card-action">
+                    <i class="material-icons">chevron_right</i>
+                </button>
+            </div>
+        </div>
+
+        <div class="subject-card">
+            <div class="subject-info">
+                <div class="subject-icon">
+                    <i class="material-icons">engineering</i>
+                </div>
+                <div class="subject-details">
+                    <h3>Engenharia de Software</h3>
+                    <p>2º Semestre • 80h</p>
+                </div>
+            </div>
+            <div class="subject-status">
+                <span class="status-tag upcoming">A Seguir</span>
+                <button class="btn-card-action">
+                    <i class="material-icons">chevron_right</i>
+                </button>
+            </div>
+        </div>
+
+    </div>
+</section>
         </main>
 
         <nav class="bottom-nav">
@@ -69,6 +173,6 @@
         </nav>
     </div>
 
-    <script src="script.js"></script>
+    <script src="gran.js"></script>
 </body>
 </html>

@@ -336,3 +336,368 @@
     text-align: center;
     display: block;
 }
+/* --- SEÇÃO DE DISCIPLINAS --- */
+.subjects-section {
+    width: 100%;
+    margin-top: 25px;
+}
+
+.section-title {
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.subjects-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px; /* Espaço entre cada card comprido */
+}
+
+/* --- CARD COMPRIDO COM EFEITO VIDRO (GLASSMORPHISM) --- */
+.subject-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+    width: 100%;
+    padding: 16px 20px;
+    
+    /* Fundo preto/roxo transparente com desfoque */
+    background: rgba(18, 10, 36, 0.65);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    
+    /* Borda sutil em roxo translúcido */
+    border: 1px solid rgba(167, 139, 250, 0.2);
+    border-radius: 18px;
+    
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease;
+}
+
+/* Efeito ao passar o mouse / focar */
+.subject-card:hover {
+    background: rgba(30, 15, 58, 0.75);
+    border-color: rgba(167, 139, 250, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(124, 58, 237, 0.25);
+}
+
+/* --- INFORMAÇÕES DO LADO ESQUERDO --- */
+.subject-info {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+/* Ícone da disciplina com fundo roxo suave */
+.subject-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    background: rgba(124, 58, 237, 0.2);
+    border: 1px solid rgba(167, 139, 250, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #c4b5fd;
+    flex-shrink: 0;
+}
+
+.subject-icon i {
+    font-size: 24px;
+}
+
+/* Textos da disciplina */
+.subject-details h3 {
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0 0 4px 0;
+}
+
+.subject-details p {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 12px;
+    margin: 0;
+}
+
+/* --- LADO DIREITO (TAGS E BOTÃO) --- */
+.subject-status {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Tags de status */
+.status-tag {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 5px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.3px;
+}
+
+.status-tag.in-progress {
+    background: rgba(124, 58, 237, 0.25);
+    color: #c4b5fd;
+    border: 1px solid rgba(167, 139, 250, 0.4);
+}
+
+.status-tag.completed {
+    background: rgba(34, 197, 94, 0.15);
+    color: #4ade80;
+    border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.status-tag.upcoming {
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Botão de seta */
+.btn-card-action {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.subject-card:hover .btn-card-action {
+    color: #c4b5fd;
+    transform: translateX(3px);
+}
+/* --- CABEÇALHO COM BOTÃO COMPACTO --- */
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.section-header .section-title {
+    margin-bottom: 0;
+}
+
+/* BOTÃO PEQUENO NO ESTILO VIBRANTE/TRANSPARENTE */
+.btn-add-subject {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    
+    background: rgba(139, 92, 246, 0.22);
+    border: 1px solid rgba(167, 139, 250, 0.6);
+    border-radius: 50%;
+    
+    color: #c084fc;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-add-subject .material-icons {
+    font-size: 20px;
+    filter: drop-shadow(0 0 4px rgba(192, 132, 252, 0.5));
+}
+
+.btn-add-subject:hover {
+    background: rgba(147, 51, 234, 0.38);
+    border-color: #c084fc;
+    transform: scale(1.08);
+    box-shadow: 0 0 16px rgba(168, 85, 247, 0.6);
+}
+
+.btn-add-subject:active {
+    transform: scale(0.95);
+}
+
+/* --- MODAL DA DISCIPLINA (VIDRO MODERNO) --- */
+.subject-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(11, 3, 20, 0.75);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.subject-modal.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.subject-modal-content {
+    background: rgba(22, 11, 42, 0.95);
+    border: 1px solid rgba(167, 139, 250, 0.35);
+    border-radius: 20px;
+    padding: 24px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7), 0 0 30px rgba(124, 58, 237, 0.25);
+    transform: scale(0.9);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.subject-modal.active .subject-modal-content {
+    transform: scale(1);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-header h3 {
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.btn-close-icon {
+    background: transparent;
+    border: none;
+    color: #a78bfa;
+    cursor: pointer;
+}
+
+/* --- FORMULÁRIOS DA MODAL --- */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #c4b5fd;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-group input {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(167, 139, 250, 0.3);
+    border-radius: 12px;
+    padding: 10px 14px;
+    color: #ffffff;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+    border-color: #8b5cf6;
+}
+
+/* --- CAMPO MÚLTIPLO DE UAs --- */
+.ua-input-wrapper {
+    display: flex;
+    gap: 8px;
+}
+
+.ua-input-wrapper input {
+    flex: 1;
+}
+
+.btn-add-ua {
+    background: rgba(124, 58, 237, 0.4);
+    border: 1px solid rgba(167, 139, 250, 0.4);
+    border-radius: 12px;
+    color: #fff;
+    padding: 0 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.btn-add-ua:hover {
+    background: #7c3aed;
+}
+
+/* CHIPS/TAGS DAS UAs QUE FOREM SENDO ADICIONADAS */
+.ua-chips-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+    max-height: 100px;
+    overflow-y: auto;
+}
+
+.ua-chip {
+    background: rgba(124, 58, 237, 0.25);
+    border: 1px solid rgba(167, 139, 250, 0.4);
+    border-radius: 8px;
+    color: #e9d5ff;
+    font-size: 12px;
+    padding: 4px 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.ua-chip i {
+    font-size: 14px;
+    cursor: pointer;
+    color: #f43f5e;
+}
+
+/* AÇÕES DA MODAL */
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 24px;
+}
+
+.modal-actions button {
+    flex: 1;
+    padding: 12px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+}
+
+.btn-cancel {
+    background: rgba(255, 255, 255, 0.08);
+    color: #cbd5e1;
+}
+
+.btn-save {
+    background: #7c3aed;
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+}
+
+.btn-save:hover {
+    background: #6d28d9;
+}
